@@ -129,4 +129,47 @@ footer.bkn-footer{position:relative;overflow:hidden;text-align:left;background:l
   render();
 })();
 </script>
+
+<style>
+/* Samostatná mobilní šířka Facebook pluginu, nikoli jen jeho rámečku */
+.bkn-feed-card{min-width:0;overflow:hidden}
+.bkn-facebook-frame{display:block;border:0;margin-inline:auto;max-width:100%;min-width:0}
+@media(max-width:600px){
+ .bkn-feed-section{padding-left:12px;padding-right:12px}
+ .bkn-feed-title{padding:15px 16px}
+ .bkn-feed-foot{padding:12px 16px}
+}
+</style>
+<script>
+(function(){
+ const frame=document.querySelector('.bkn-facebook-frame');
+ if(!frame)return;
+ let lastWidth=0,resizeTimer;
+ function setWidth(){
+   const card=frame.closest('.bkn-feed-card');
+   if(!card)return;
+   // Facebook Page Plugin počítá šířku při načtení, proto se musí změnit i URL a atribut width.
+   const available=Math.floor(card.getBoundingClientRect().width);
+   const width=Math.max(180,Math.min(500,available));
+   if(Math.abs(width-lastWidth)<2)return;
+   lastWidth=width;
+   frame.setAttribute('width',String(width));
+   frame.style.setProperty('width',width+'px','important');
+   const url=new URL('https://www.facebook.com/plugins/page.php');
+   url.searchParams.set('href','https://www.facebook.com/bezeckyklubnachod');
+   url.searchParams.set('tabs','timeline');
+   url.searchParams.set('width',String(width));
+   url.searchParams.set('height',String(window.innerWidth<=680?470:520));
+   url.searchParams.set('small_header','false');
+   url.searchParams.set('adapt_container_width','false');
+   url.searchParams.set('hide_cover','false');
+   url.searchParams.set('show_facepile','false');
+   frame.src=url.toString();
+ }
+ // Počkáme na dopočítání rozložení a na případné změny velikosti.
+ if(document.readyState==='complete')requestAnimationFrame(setWidth);
+ else window.addEventListener('load',()=>requestAnimationFrame(setWidth),{once:true});
+ window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(setWidth,250)});
+})();
+</script>
 </body></html>
