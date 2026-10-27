@@ -50,6 +50,11 @@ footer.bkn-footer{position:relative;overflow:hidden;text-align:left;background:l
 .bkn-feed-grid{grid-template-columns:minmax(0,1fr);justify-content:stretch}
 .bkn-feed-card{width:100%}
 @media(max-width:680px){.bkn-feed-grid{grid-template-columns:minmax(0,1fr)}}
+/* Kompaktní rámeček kolem facebookového pluginu */
+.bkn-feed-grid{display:flex;justify-content:center;align-items:stretch}
+.bkn-feed-card{width:100%;max-width:550px;min-width:0}
+.bkn-facebook-frame{max-width:500px}
+@media(max-width:600px){.bkn-feed-card{max-width:100%}}
 </style></head><body>
 <header class="header"><div class="nav"><button aria-controls="mainNav" aria-expanded="false" class="menu-button" id="menuButton">☰ Menu</button><nav aria-label="Hlavní navigace" class="nav-links" id="mainNav"><a class="active" href="#uvod">Domů</a><a href="#aktuality">Aktuality</a><a href="#treneri">Trenéři</a><a href="#zavody">Závody</a><a href="#treninky">Tréninky</a><a href="#onas">O nás</a><a href="#kontakt">Kontakt</a><div class="social-icons"><a aria-label="Facebook BKN" href="https://www.facebook.com/bezeckyklubnachod" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M15 21v-8h3l.5-4H15V7c0-1.2.4-2 2-2h2V1.4A22 22 0 0 0 16 1c-3 0-5 1.8-5 5v3H8v4h3v8"></path></svg></a></div></nav></div></header>
 <main><section class="hero" id="uvod"><div class="hero-content"><div class="identity"><img alt="Logo Běžeckého klubu Náchod" class="hero-logo" height="240" src="logo-bkn.png" width="240"/><div class="identity-copy"><h1>Běžecký klub<br/>Náchod</h1><div aria-hidden="true" class="swoosh"></div></div></div><p class="hero-desc">Parta běžců z Náchoda a okolí. Tréninky, závody, společné výběhy a radost z běhání.</p><div class="hero-actions"><a class="btn primary" href="#aktuality">Aktuality →</a><a class="btn outline" href="#onas">O klubu</a></div></div><svg aria-hidden="true" class="wave" preserveaspectratio="none" viewbox="0 0 1440 110"><path d="M0 62 C190 -20 350 30 550 73 S980 120 1190 46 S1350 22 1440 48 L1440 110 L0 110Z" fill="white"></path><path d="M0 62 C190 -20 350 30 550 73 S980 120 1190 46 S1350 22 1440 48" fill="none" stroke="#078ff2" stroke-width="9"></path></svg></section>
