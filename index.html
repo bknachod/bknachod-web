@@ -155,7 +155,17 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
 .bkn-home-calendar .bkn-event-cards{grid-template-columns:repeat(3,minmax(0,1fr));text-align:left}
 .bkn-home-calendar .bkn-event-card{grid-template-columns:75px minmax(0,1fr)}
 @media(max-width:800px){.bkn-home-calendar .bkn-event-cards{grid-template-columns:1fr}}
-</style></head><body>
+</style>
+<style id="bkn-event-category-styles">
+.bkn-event-card{border-top:4px solid var(--event-color,#078ff2)}
+.bkn-event-date{background:var(--event-soft,#e8f4ff);color:var(--event-color,#0b5189)}
+.bkn-event-category{display:inline-flex;align-items:center;gap:6px;color:var(--event-color,#0b5189);font-size:.75rem;font-weight:800;margin-bottom:7px}
+.bkn-event-visual{grid-column:1/-1;min-height:104px;display:flex;align-items:center;justify-content:center;gap:18px;background:linear-gradient(115deg,var(--event-soft,#e8f4ff),#fff);border-bottom:1px solid #e7edf4}
+.bkn-event-visual-symbol{font-size:2.8rem;line-height:1}
+.bkn-event-visual-title{font-size:1.1rem;font-weight:800;color:var(--event-color,#0b5189)}
+.bkn-event-image{height:150px;max-height:none}
+</style>
+</head><body>
 <header class="header"><div class="nav"><a aria-label="Přihláška do BKN – otevře se v nové kartě" class="bkn-registration bkn-registration-mobile" href="https://bknachod.trial.eosclub.app/registration" rel="noopener noreferrer" target="_blank">PŘIHLÁŠKA</a><button aria-controls="mainNav" aria-expanded="false" class="menu-button" id="menuButton">☰ Menu</button><nav aria-label="Hlavní navigace" class="nav-links" id="mainNav"><a class="active" href="#uvod">Domů</a><a href="#aktuality">Aktuality</a><a href="#treneri">Trenéři</a><a href="#zavody">Závody</a><a href="#treninky">Tréninky</a><a href="#onas">O nás</a><a href="#kalendar">Kalendář akcí</a><a href="#kontakt">Kontakt</a><a class="bkn-registration bkn-registration-desktop" href="https://bknachod.trial.eosclub.app/registration" rel="noopener noreferrer" target="_blank">PŘIHLÁŠKA</a><div class="social-icons"><a aria-label="Facebook BKN" href="https://www.facebook.com/bezeckyklubnachod" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M15 21v-8h3l.5-4H15V7c0-1.2.4-2 2-2h2V1.4A22 22 0 0 0 16 1c-3 0-5 1.8-5 5v3H8v4h3v8"></path></svg></a><a aria-label="Instagram BKN" href="https://www.instagram.com/bezeckyklubnachod/" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="18" rx="5" width="18" x="3" y="3"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" fill="currentColor" r="1" stroke="none"></circle></svg></a></div></nav></div></header>
 <main><section class="hero" id="uvod"><div class="hero-content"><div class="identity"><img alt="Logo Běžeckého klubu Náchod" class="hero-logo" height="240" src="logo-bkn.png" width="240"/><div class="identity-copy"><h1>Běžecký klub<br/>Náchod</h1><div aria-hidden="true" class="swoosh"></div></div></div><p class="hero-desc">Parta běžců z Náchoda a okolí. Tréninky, závody, společné výběhy a radost z běhání.</p><div class="hero-actions"><a class="btn primary" href="#aktuality">Aktuality →</a><a class="btn outline" href="#onas">O klubu</a></div></div><svg aria-hidden="true" class="wave" preserveaspectratio="none" viewbox="0 0 1440 110"><path d="M0 62 C190 -20 350 30 550 73 S980 120 1190 46 S1350 22 1440 48 L1440 110 L0 110Z" fill="white"></path><path d="M0 62 C190 -20 350 30 550 73 S980 120 1190 46 S1350 22 1440 48" fill="none" stroke="#078ff2" stroke-width="9"></path></svg></section>
 <section aria-label="Rychlé odkazy" class="quick-links"><div class="quick-grid"><a class="quick-link" href="#treneri"><svg aria-hidden="true" viewbox="0 0 48 48"><circle cx="18" cy="15" r="7"></circle><circle cx="34" cy="17" r="6"></circle><path d="M4 41v-5c0-8 6-13 14-13s14 5 14 13v5M32 26c7 0 12 5 12 12v3"></path></svg><strong>Trenéři</strong><small>Poznej naše trenéry</small></a><a class="quick-link" href="#zavody"><svg aria-hidden="true" viewbox="0 0 48 48"><rect height="32" rx="4" width="36" x="6" y="10"></rect><path d="M6 20h36M15 5v10M33 5v10M15 28h4M25 28h4M15 35h4M25 35h4"></path></svg><strong>Závody a výsledky</strong><small>Přehled závodů a úspěchů</small></a><a class="quick-link" href="#treninky"><svg aria-hidden="true" viewbox="0 0 48 48"><circle cx="31" cy="8" r="4"></circle><path d="m24 18 8-4 6 5M24 18l-7 9 8 6M32 14l-5 13 10 7M25 33l-8 10M37 34l6 9M15 23l-8 5"></path></svg><strong>Tréninky</strong><small>Kdy a kde běháme</small></a><a class="quick-link" href="#galerie"><svg aria-hidden="true" viewbox="0 0 48 48"><rect height="28" rx="3" width="32" x="4" y="9"></rect><path d="M12 37v4h32V16h-8M8 32l10-11 7 8 5-5 6 8"></path><circle cx="26" cy="17" r="3"></circle></svg><strong>Fotogalerie</strong><small>Závody, tréninky a akce</small></a></div></section>
@@ -298,17 +308,30 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
   if(!home || !side)return;
   const months=['ledna','února','března','dubna','května','června','července','srpna','září','října','listopadu','prosince'];
   function text(tag,value,className){const e=document.createElement(tag);if(className)e.className=className;e.textContent=value;return e;}
+  const categories={
+    '11':{name:'Závody',color:'#dc2626',soft:'#fee2e2',symbol:'🏅'},
+    '10':{name:'Soustředění',color:'#16a34a',soft:'#dcfce7',symbol:'⛺'},
+    '6':{name:'Tréninky',color:'#ea580c',soft:'#ffedd5',symbol:'🏃'},
+    '3':{name:'Ostatní klubové akce',color:'#9333ea',soft:'#f3e8ff',symbol:'🎉'}
+  };
+  function categoryOf(event){
+    return categories[String(event.color||'')]||{name:'Ostatní klubové akce',color:'#9333ea',soft:'#f3e8ff',symbol:'🎉'};
+  }
   function render(target,events){target.replaceChildren();if(!events.length){target.append(text('p','Zatím nejsou naplánované žádné další akce.'));return;}
     events.forEach(event=>{
       const date=new Date(event.start);if(Number.isNaN(date.getTime()))return;
       const day=new Intl.DateTimeFormat('cs-CZ',{day:'numeric',timeZone:'Europe/Prague'}).format(date);
       const month=new Intl.DateTimeFormat('cs-CZ',{month:'long',timeZone:'Europe/Prague'}).format(date);
       const card=text('article','','bkn-event-card');
+      const category=categoryOf(event);
+      card.style.setProperty('--event-color',category.color);
+      card.style.setProperty('--event-soft',category.soft);
       // Obrázek lze zadat jako přímou veřejnou https adresu v popisu události.
       const desc=String(event.description||'');const match=desc.match(/https:\/\/[^\s<>"']+\.(?:jpg|jpeg|png|webp)(?:\?[^\s<>"']*)?/i);
       if(match){const img=document.createElement('img');img.className='bkn-event-image';img.loading='lazy';img.alt='Fotografie k akci '+String(event.title||'');img.src=match[0].replace(/&amp;/g,'&');card.append(img);}
+      else{const visual=text('div','','bkn-event-visual');visual.append(text('span',category.symbol,'bkn-event-visual-symbol'),text('span',category.name,'bkn-event-visual-title'));card.append(visual);}
       const dateEl=text('div','','bkn-event-date');dateEl.append(text('strong',day),text('span',month));card.append(dateEl);
-      const details=text('div','','bkn-event-detail');details.append(text('h4',String(event.title||'Klubová akce')));
+      const details=text('div','','bkn-event-detail');details.append(text('span',category.name,'bkn-event-category'),text('h4',String(event.title||'Klubová akce')));
       if(!event.allDay){details.append(text('p',new Intl.DateTimeFormat('cs-CZ',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Prague'}).format(date)+' hod.'));}
       if(event.location)details.append(text('p','📍 '+event.location));
       const clean=desc.replace(/<[^>]*>/g,' ').replace(/https:\/\/\S+/g,' ').replace(/\s+/g,' ').trim();
