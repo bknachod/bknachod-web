@@ -166,7 +166,7 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
 /* Pravý sloupec má výšku srovnatelnou s kalendářem vlevo.
    Další události zůstávají dostupné posouváním uvnitř sloupce. */
 @media (min-width:851px){
-  .bkn-calendar-layout > .bkn-calendar-help{height:680px;display:flex;flex-direction:column}
+  .bkn-calendar-layout > .bkn-calendar-help{height:calc(680px + 62px);display:flex;flex-direction:column}
   .bkn-calendar-help > h3{flex:none}
   .bkn-calendar-help-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#b8d7ed #f5f9fd}
 }
