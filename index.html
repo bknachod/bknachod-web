@@ -161,7 +161,6 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
 .bkn-event-date{background:var(--event-soft,#e8f4ff);color:var(--event-color,#0b5189)}
 .bkn-event-category{display:inline-flex;align-items:center;gap:6px;color:var(--event-color,#0b5189);font-size:.75rem;font-weight:800;margin-bottom:7px}
 .bkn-event-visual{grid-column:1/-1;min-height:104px;display:flex;align-items:center;justify-content:center;gap:18px;background:linear-gradient(115deg,var(--event-soft,#e8f4ff),#fff);border-bottom:1px solid #e7edf4}
-.bkn-event-visual-symbol{font-size:2.8rem;line-height:1}
 .bkn-event-visual-title{font-size:1.1rem;font-weight:800;color:var(--event-color,#0b5189)}
 .bkn-event-image{height:150px;max-height:none}
 </style>
@@ -329,7 +328,7 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
       // Obrázek lze zadat jako přímou veřejnou https adresu v popisu události.
       const desc=String(event.description||'');const match=desc.match(/https:\/\/[^\s<>"']+\.(?:jpg|jpeg|png|webp)(?:\?[^\s<>"']*)?/i);
       if(match){const img=document.createElement('img');img.className='bkn-event-image';img.loading='lazy';img.alt='Fotografie k akci '+String(event.title||'');img.src=match[0].replace(/&amp;/g,'&');card.append(img);}
-      else{const visual=text('div','','bkn-event-visual');visual.append(text('span',category.symbol,'bkn-event-visual-symbol'),text('span',category.name,'bkn-event-visual-title'));card.append(visual);}
+      else{const visual=text('div','','bkn-event-visual');visual.append(text('span',category.name,'bkn-event-visual-title'));card.append(visual);}
       const dateEl=text('div','','bkn-event-date');dateEl.append(text('strong',day),text('span',month));card.append(dateEl);
       const details=text('div','','bkn-event-detail');details.append(text('span',category.name,'bkn-event-category'),text('h4',String(event.title||'Klubová akce')));
       if(!event.allDay){details.append(text('p',new Intl.DateTimeFormat('cs-CZ',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Prague'}).format(date)+' hod.'));}
