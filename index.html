@@ -238,6 +238,7 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
 .bkn-cookie-banner{position:fixed;bottom:18px;left:18px;right:18px;z-index:99999;max-width:1040px;margin:auto;background:#fff;color:#193149;border:1px solid #cfe4f4;border-radius:17px;box-shadow:0 12px 42px #0c294b42;padding:20px 23px;display:none;align-items:center;gap:22px;font:inherit}
 .bkn-cookie-banner.is-visible{display:flex}.bkn-cookie-banner h2{font-size:1.12rem;margin:0 0 7px;color:#102b46}.bkn-cookie-banner p{font-size:.91rem;line-height:1.55;margin:0;color:#4b5f72}.bkn-cookie-actions{display:flex;gap:9px;flex-wrap:wrap;flex-shrink:0}.bkn-cookie-actions button,.bkn-cookie-settings{border:1px solid #0786dc;border-radius:9px;padding:11px 15px;cursor:pointer;font:inherit;font-size:.87rem;font-weight:700}.bkn-cookie-accept{background:#0786dc;color:#fff}.bkn-cookie-reject{background:white;color:#0872bd}.bkn-cookie-settings{background:transparent;color:inherit;border:0;text-decoration:underline;padding:4px 6px;font-size:.85rem}.bkn-cookie-placeholder{background:#f0f7fc;border:1px dashed #b9d8ee;border-radius:12px;padding:20px;text-align:center;color:#425d76;font-size:.91rem;line-height:1.6}.bkn-cookie-placeholder button{display:block;margin:12px auto 0;border:0;border-radius:9px;background:#0786dc;color:#fff;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer}
 @media(max-width:760px){.bkn-cookie-banner{flex-direction:column;align-items:stretch;bottom:10px;left:10px;right:10px;padding:17px}.bkn-cookie-actions{flex-direction:column}.bkn-cookie-actions button{width:100%}}
+#bknCookieInfo{margin-top:10px;max-height:180px;overflow:auto;border-top:1px solid #dce8f2;padding-top:10px}#bknCookieInfo p{font-size:.82rem}#bknCookieInfo a{color:#0872bd;text-decoration:underline}
 </style></head><body>
 <header class="header"><div class="nav"><a aria-label="Přihláška do BKN – otevře se v nové kartě" class="bkn-registration bkn-registration-mobile" href="https://bknachod.trial.eosclub.app/registration" rel="noopener noreferrer" target="_blank">PŘIHLÁŠKA</a><button aria-controls="mainNav" aria-expanded="false" class="menu-button" id="menuButton">☰ Menu</button><nav aria-label="Hlavní navigace" class="nav-links" id="mainNav"><a class="active" href="#uvod">Domů</a><a href="#aktuality">Aktuality</a><a href="#treneri">Trenéři</a><a href="#zavody">Závody</a><a href="#treninky">Tréninky</a><a href="#kalendar">Kalendář akcí</a><a href="#strava">Strava BKN</a><a href="#casomira">Časomíra</a><a href="#kontakt">Kontakt</a><a class="bkn-registration bkn-registration-desktop" href="https://bknachod.trial.eosclub.app/registration" rel="noopener noreferrer" target="_blank">PŘIHLÁŠKA</a><div class="social-icons"><a aria-label="Facebook BKN" href="https://www.facebook.com/bezeckyklubnachod" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M15 21v-8h3l.5-4H15V7c0-1.2.4-2 2-2h2V1.4A22 22 0 0 0 16 1c-3 0-5 1.8-5 5v3H8v4h3v8"></path></svg></a><a aria-label="Instagram BKN" href="https://www.instagram.com/bezeckyklubnachod/" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="18" rx="5" width="18" x="3" y="3"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" fill="currentColor" r="1" stroke="none"></circle></svg></a></div></nav></div></header>
 <main><section class="hero" id="uvod"><div class="hero-content"><div class="identity"><img alt="Logo Běžeckého klubu Náchod" class="hero-logo" height="240" src="logo-bkn.png" width="240"/><div class="identity-copy"><h1>Běžecký klub<br/>Náchod</h1><div aria-hidden="true" class="swoosh"></div></div><aside aria-label="Týdenní souhrn BKN na Stravě" class="bkn-hero-strava"><div class="bkn-hero-strava-label">Tento týden na <strong>STRAVĚ</strong></div><div class="bkn-hero-strava-viewport"><iframe height="160" loading="lazy" scrolling="no" data-consent-src="https://www.strava.com/clubs/1152575/latest-rides/2de62edae6cc3b2467d170a9481aabfab0b64194?show_rides=false" src="about:blank" title="Strava BKN – týdenní souhrn na úvodní stránce" width="300"></iframe></div></aside></div><p class="hero-desc">Parta běžců z Náchoda a okolí. Tréninky, závody, společné výběhy a radost z běhání.</p><div class="hero-actions"><a class="btn primary" href="#aktuality">Aktuality →</a><a class="btn outline" href="#onas">O klubu</a></div></div><svg aria-hidden="true" class="wave" preserveaspectratio="none" viewbox="0 0 1440 110"><path d="M0 62 C190 -20 350 30 550 73 S980 120 1190 46 S1350 22 1440 48 L1440 110 L0 110Z" fill="white"></path><path d="M0 62 C190 -20 350 30 550 73 S980 120 1190 46 S1350 22 1440 48" fill="none" stroke="#078ff2" stroke-width="9"></path></svg></section>
@@ -433,15 +434,16 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
   });
 })();
 </script>
-<div class="bkn-cookie-banner" id="bknCookieBanner" role="dialog" aria-label="Nastavení soukromí" aria-live="polite"><div><h2>🍪 Cookies a ochrana soukromí</h2><p>Pro správné fungování webu používáme nezbytné úložiště. Se souhlasem zobrazíme také obsah služeb Facebook, Strava a Google (kalendář a mapy), které mohou používat vlastní cookies a zpracovávat údaje o návštěvě. Volbu můžete kdykoliv změnit v patičce.</p></div><div class="bkn-cookie-actions"><button class="bkn-cookie-accept" id="bknCookieAccept" type="button">Přijmout vše</button><button class="bkn-cookie-reject" id="bknCookieReject" type="button">Odmítnout volitelné</button></div></div>
+<div class="bkn-cookie-banner" id="bknCookieBanner" role="dialog" aria-label="Nastavení soukromí" aria-live="polite"><div><h2>🍪 Cookies a ochrana soukromí</h2><p>Pro správné fungování webu používáme nezbytné úložiště. Se souhlasem zobrazíme také obsah služeb Facebook, Strava a Google (kalendář a mapy), které mohou používat vlastní cookies a zpracovávat údaje o návštěvě. Volbu můžete kdykoliv změnit v patičce. <button type="button" class="bkn-cookie-settings" id="bknCookieInfoToggle" aria-expanded="false" aria-controls="bknCookieInfo">Více informací</button></p><div id="bknCookieInfo" hidden><p><strong>Nezbytné úložiště:</strong> uchovává vaši volbu souhlasu v tomto prohlížeči (90 dní při přijetí, 180 dní při odmítnutí). <strong>Volitelný externí obsah:</strong> Facebook (Meta), Strava a Google (Kalendář a Mapy). Po povolení mohou tyto služby zpracovávat IP adresu a další údaje podle svých vlastních podmínek a ukládat cookies; jejich konkrétní doby uchování určují poskytovatelé. Bez souhlasu se vložený obsah nenačte. <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener noreferrer">Meta</a> · <a href="https://www.strava.com/legal/privacy" target="_blank" rel="noopener noreferrer">Strava</a> · <a href="https://policies.google.com/privacy?hl=cs" target="_blank" rel="noopener noreferrer">Google</a>.</p></div></div><div class="bkn-cookie-actions"><button class="bkn-cookie-accept" id="bknCookieAccept" type="button">Přijmout vše</button><button class="bkn-cookie-reject" id="bknCookieReject" type="button">Odmítnout volitelné</button></div></div>
 <script id="bkn-cookie-script">
 (function(){
  const key='bkn-cookie-choice-v1';
- const validityMs=90*24*60*60*1000; // 90 dní od poslední volby
+ const dayMs=24*60*60*1000;
+ const validityFor=choice=> (choice==='rejected'?180:90)*dayMs;
  let choice=null;
  try{
    const saved=JSON.parse(localStorage.getItem(key)||'null');
-   if(saved && (saved.choice==='accepted'||saved.choice==='rejected') && Number.isFinite(saved.savedAt) && Date.now()-saved.savedAt>=0 && Date.now()-saved.savedAt<validityMs){choice=saved.choice;}
+   if(saved && (saved.choice==='accepted'||saved.choice==='rejected') && Number.isFinite(saved.savedAt) && Date.now()-saved.savedAt>=0 && Date.now()-saved.savedAt<validityFor(saved.choice)){choice=saved.choice;}
    else localStorage.removeItem(key);
  }catch(e){try{localStorage.removeItem(key)}catch(_){} }
  const banner=document.getElementById('bknCookieBanner');
@@ -459,19 +461,22 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
  }
  function activate(){
    document.querySelectorAll('.bkn-cookie-placeholder').forEach(el=>el.remove());
-   [...frames,...(fb?[fb]:[])].forEach(frame=>{frame.style.display='';});
+   [...frames,...(fb?[fb]:[])].forEach(frame=>{frame.style.display='';delete frame.dataset.cookiePlaceholder;});
    frames.forEach(frame=>{if(frame.src==='about:blank')frame.src=frame.dataset.consentSrc;});
    window.dispatchEvent(new Event('bkn-consent-accepted'));
  }
  function deactivate(){
    frames.forEach(frame=>frame.src='about:blank');
-   if(fb)fb.src='about:blank';
+   if(fb){fb.src='about:blank';fb.removeAttribute('data-cookie-placeholder');}
    showPlaceholders();
  }
  function setChoice(next){choice=next;try{localStorage.setItem(key,JSON.stringify({choice:next,savedAt:Date.now()}))}catch(e){}window.bknExternalConsent=next==='accepted';banner.classList.remove('is-visible');if(window.bknExternalConsent)activate();else deactivate();}
  document.getElementById('bknCookieAccept').addEventListener('click',()=>setChoice('accepted'));
  document.getElementById('bknCookieReject').addEventListener('click',()=>setChoice('rejected'));
  document.querySelectorAll('[data-bkn-cookie-settings]').forEach(el=>el.addEventListener('click',()=>banner.classList.add('is-visible')));
+ const infoToggle=document.getElementById('bknCookieInfoToggle');
+ const info=document.getElementById('bknCookieInfo');
+ if(infoToggle&&info)infoToggle.addEventListener('click',()=>{info.hidden=!info.hidden;infoToggle.setAttribute('aria-expanded',String(!info.hidden));});
  if(window.bknExternalConsent)activate();else{deactivate();if(!choice)banner.classList.add('is-visible');}
 })();
 </script></body></html>
