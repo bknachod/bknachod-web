@@ -2,7 +2,12 @@
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendEmailVerification,reload} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {getFirestore,collection,query,onSnapshot,addDoc,updateDoc,deleteDoc,doc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-const config={apiKey:'AIzaSyB6__m4-BNgd7A9VDa9XvrixOumQ tCzt8'.replace(' ',''),authDomain:'bkn-web-b1f6c.firebaseapp.com',projectId:'bkn-web-b1f6c',appId:'1:654862629114:web:8b3a025ce9e839ceb7f143'};
+const config = {
+  apiKey: "AIzaSyB6__m4-BNgd7A9VDa9XvrixOumQtCzt8",
+  authDomain: "bkn-web-b1f6c.firebaseapp.com",
+  projectId: "bkn-web-b1f6c",
+  appId: "1:654862629114:web:8b3a025ce9e839ceb7f143"
+};
 const app=initializeApp(config),auth=getAuth(app),db=getFirestore(app),posts=collection(db,'articles');
 const $=id=>document.getElementById(id);let editing=null,items=[],unsub=null;const message=t=>$('notice').textContent=t;
 function show(section){for(const id of ['login','verify','editor'])$(id).hidden=id!==section;}
