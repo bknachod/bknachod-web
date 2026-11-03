@@ -716,8 +716,8 @@ if(target){
   },error=>{console.error('BKN: Firestore articles',error);showState('Aktuality se nepodařilo načíst. Zkontrolujte připojení nebo oprávnění databáze.');});
 }
 </script><script id="bkn-club-gallery-script">(function(){
-// Klubové fotografie uložené ve složce fotogalerie/dospeli.
-const photos={dospeli:["fotogalerie/dospeli/dospeli_01.webp", "fotogalerie/dospeli/dospeli_02.webp", "fotogalerie/dospeli/dospeli_03.webp", "fotogalerie/dospeli/dospeli_04.webp", "fotogalerie/dospeli/dospeli_05.webp", "fotogalerie/dospeli/dospeli_06.webp", "fotogalerie/dospeli/dospeli_07.webp", "fotogalerie/dospeli/dospeli_08.webp", "fotogalerie/dospeli/dospeli_09.webp", "fotogalerie/dospeli/dospeli_10.webp", "fotogalerie/dospeli/dospeli_11.webp", "fotogalerie/dospeli/dospeli_12.webp"],zactvo:[],mladsi:[],mini:[]};
+// Klubové fotografie zatím uložené v hlavním adresáři webu.
+const photos={dospeli:["dospeli_01.webp", "dospeli_02.webp", "dospeli_03.webp", "dospeli_04.webp", "dospeli_05.webp", "dospeli_06.webp", "dospeli_07.webp", "dospeli_08.webp", "dospeli_09.webp", "dospeli_10.webp", "dospeli_11.webp", "dospeli_12.webp"],zactvo:[],mladsi:[],mini:[]};
 const labels={dospeli:'Dospělí',zactvo:'Žactvo',mladsi:'Mladší přípravka',mini:'Minipřípravka'};
 const grid=document.getElementById('bknClubGalleryGrid'),dialog=document.getElementById('bknClubPhotoDialog'),img=document.getElementById('bknClubPhotoImage'),counter=document.getElementById('bknClubPhotoCounter');if(!grid)return;
 let category='dospeli',index=0;
