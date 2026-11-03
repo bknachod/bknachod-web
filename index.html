@@ -291,7 +291,18 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
 #aktuality .bkn-article-cover{width:100%;max-height:470px;object-fit:contain;background:#f0f7fc}
 @media(max-width:600px){#aktuality.bkn-news-section{padding:36px 16px 55px}#aktuality .bkn-article-card{padding:20px}#aktuality .bkn-article-cover{max-height:320px}}
 </style>
-</head><body>
+<style id="bkn-article-preview-style">
+#aktuality .bkn-article-card{max-width:100%}
+#aktuality .bkn-article-card .bkn-article-cover{max-height:340px;object-fit:contain;background:#eef6fc}
+#aktuality .bkn-article-excerpt{line-height:1.75;color:#40566e;margin:15px 0 20px;overflow-wrap:anywhere}
+#aktuality .bkn-article-more{display:inline-flex;align-items:center;justify-content:center;background:#0879d5;color:#fff;border:0;border-radius:26px;padding:12px 22px;font:inherit;font-weight:750;cursor:pointer;margin-top:5px}
+#aktuality .bkn-article-more:hover{background:#065caa}
+#aktuality .bkn-article-more:focus-visible{outline:3px solid #10243b;outline-offset:3px}
+#aktuality .bkn-article-expanded{margin-top:22px;border-top:1px solid #d9e9f4;padding-top:22px}
+#aktuality .bkn-article-expanded[hidden],#aktuality .bkn-article-excerpt[hidden]{display:none!important}
+#aktuality .bkn-article-expanded .bkn-article-content{white-space:pre-wrap;line-height:1.85}
+@media(max-width:600px){#aktuality .bkn-article-card .bkn-article-cover{max-height:250px}}
+</style></head><body>
 <header class="header"><div class="nav"><a class="bkn-mobile-home" href="#uvod" aria-label="Domů – úvodní stránka" title="Domů"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></a><a aria-label="Přihláška do BKN – otevře se v nové kartě" class="bkn-registration bkn-registration-mobile" href="https://bknachod.trial.eosclub.app/registration" rel="noopener noreferrer" target="_blank">PŘIHLÁŠKA</a><button aria-controls="mainNav" aria-expanded="false" class="menu-button" id="menuButton">☰ Menu</button><nav aria-label="Hlavní navigace" class="nav-links" id="mainNav"><a class="active" href="#uvod">Domů</a><a href="#aktuality">Aktuality</a><a href="#treneri">Trenéři</a><a href="#zavody">Závody</a><a href="#treninky">Tréninky</a><a href="#kalendar">Kalendář akcí</a><a href="#strava">Strava BKN</a><a href="#casomira">Časomíra</a><a href="#kontakt">Kontakt</a><a class="bkn-registration bkn-registration-desktop" href="https://bknachod.trial.eosclub.app/registration" rel="noopener noreferrer" target="_blank">PŘIHLÁŠKA</a><div class="social-icons"><a aria-label="Facebook BKN" href="https://www.facebook.com/bezeckyklubnachod" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M15 21v-8h3l.5-4H15V7c0-1.2.4-2 2-2h2V1.4A22 22 0 0 0 16 1c-3 0-5 1.8-5 5v3H8v4h3v8"></path></svg></a><a aria-label="Instagram BKN" href="https://www.instagram.com/bezeckyklubnachod/" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="18" rx="5" width="18" x="3" y="3"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" fill="currentColor" r="1" stroke="none"></circle></svg></a></div></nav></div></header>
 <main><section class="hero" id="uvod"><div class="hero-content"><div class="identity"><img alt="Logo Běžeckého klubu Náchod" class="hero-logo" height="240" src="logo-bkn.png" width="240"/><div class="identity-copy"><h1>Běžecký klub<br/>Náchod</h1><div aria-hidden="true" class="swoosh"></div></div><aside aria-label="Týdenní souhrn BKN na Stravě" class="bkn-hero-strava"><div class="bkn-hero-strava-label">Tento týden na <strong>STRAVĚ</strong></div><div class="bkn-hero-strava-viewport"><iframe height="160" loading="lazy" scrolling="no" data-consent-src="https://www.strava.com/clubs/1152575/latest-rides/2de62edae6cc3b2467d170a9481aabfab0b64194?show_rides=false" src="about:blank" title="Strava BKN – týdenní souhrn na úvodní stránce" width="300"></iframe></div></aside></div><p class="hero-desc">Parta běžců z Náchoda a okolí. Tréninky, závody, společné výběhy a radost z běhání.</p><div class="hero-actions-wrap"><div class="hero-actions"><a class="btn primary" href="#aktuality">Aktuality →</a><a class="btn outline" href="#onas">O klubu</a></div><a class="btn bkn-terminovka-button" href="#terminovka">📅 Termínovka ČR →</a></div></div><svg aria-hidden="true" class="wave" preserveaspectratio="none" viewbox="0 0 1440 110"><path d="M0 62 C190 -20 350 30 550 73 S980 120 1190 46 S1350 22 1440 48 L1440 110 L0 110Z" fill="white"></path><path d="M0 62 C190 -20 350 30 550 73 S980 120 1190 46 S1350 22 1440 48" fill="none" stroke="#078ff2" stroke-width="9"></path></svg></section>
 <section aria-label="Rychlé odkazy" class="quick-links"><div class="quick-grid"><a class="quick-link" href="#treneri"><svg aria-hidden="true" viewbox="0 0 48 48"><circle cx="18" cy="15" r="7"></circle><circle cx="34" cy="17" r="6"></circle><path d="M4 41v-5c0-8 6-13 14-13s14 5 14 13v5M32 26c7 0 12 5 12 12v3"></path></svg><strong>Trenéři</strong><small>Poznej naše trenéry</small></a><a class="quick-link" href="#zavody"><svg aria-hidden="true" viewbox="0 0 48 48"><rect height="32" rx="4" width="36" x="6" y="10"></rect><path d="M6 20h36M15 5v10M33 5v10M15 28h4M25 28h4M15 35h4M25 35h4"></path></svg><strong>Závody a výsledky</strong><small>Přehled závodů a úspěchů</small></a><a class="quick-link" href="#treninky"><svg aria-hidden="true" viewbox="0 0 48 48"><circle cx="31" cy="8" r="4"></circle><path d="m24 18 8-4 6 5M24 18l-7 9 8 6M32 14l-5 13 10 7M25 33l-8 10M37 34l6 9M15 23l-8 5"></path></svg><strong>Tréninky</strong><small>Kdy a kde běháme</small></a><a class="quick-link" href="#galerie"><svg aria-hidden="true" viewbox="0 0 48 48"><rect height="28" rx="3" width="32" x="4" y="9"></rect><path d="M12 37v4h32V16h-8M8 32l10-11 7 8 5-5 6 8"></path><circle cx="26" cy="17" r="3"></circle></svg><strong>Fotogalerie</strong><small>Závody, tréninky a akce</small></a></div></section>
@@ -665,12 +676,21 @@ if(target){
         const cover=document.createElement('img');cover.className='bkn-article-cover';cover.src=photos[0];cover.alt=`Úvodní fotografie: ${post.title||'článek'}`;cover.loading='lazy';cover.tabIndex=0;cover.setAttribute('role','button');cover.setAttribute('aria-label','Otevřít fotogalerii');
         cover.onclick=()=>openViewer(photos,0);cover.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openViewer(photos,0);}};card.append(cover);
       }
-      const content=document.createElement('div');content.className='bkn-article-content';content.textContent=post.content||'';card.append(content);
+      const rawContent=post.content||'';
+      const excerpt=document.createElement('p');excerpt.className='bkn-article-excerpt';
+      const normalized=rawContent.replace(/\s+/g,' ').trim();
+      excerpt.textContent=normalized.length>240?normalized.slice(0,240).replace(/\s+\S*$/,'')+'…':normalized;
+      if(normalized)card.append(excerpt);
+      const expanded=document.createElement('div');expanded.className='bkn-article-expanded';expanded.hidden=true;
+      const content=document.createElement('div');content.className='bkn-article-content';content.textContent=rawContent;expanded.append(content);
       if(photos.length>1){
         const gallery=document.createElement('div');gallery.className='bkn-article-gallery';gallery.setAttribute('aria-label','Další fotografie článku');
         photos.slice(1).forEach((url,i)=>{const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',`Otevřít fotografii ${i+2} z ${photos.length}`);const img=document.createElement('img');img.src=url;img.loading='lazy';img.alt=`Fotografie ${i+2}`;button.append(img);button.onclick=()=>openViewer(photos,i+1);gallery.append(button);});
-        card.append(gallery);
+        expanded.append(gallery);
       }
+      const more=document.createElement('button');more.type='button';more.className='bkn-article-more';more.textContent='Číst více →';more.setAttribute('aria-expanded','false');
+      more.addEventListener('click',()=>{const opening=expanded.hidden;expanded.hidden=!opening;excerpt.hidden=opening;more.textContent=opening?'Zobrazit méně ↑':'Číst více →';more.setAttribute('aria-expanded',String(opening));});
+      card.append(more,expanded);
       fragment.append(card);
     }
     target.replaceChildren(fragment);
