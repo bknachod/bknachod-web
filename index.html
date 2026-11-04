@@ -635,7 +635,18 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
     const page=pageName();
     if(page===lastPage)return;
     lastPage=page;
-    gtag('event','page_view',{page_title:document.title+' | '+page,page_location:location.href,page_path:location.pathname+location.hash});
+    // Virtuální URL pro GA4: skutečná navigace webu zůstává přes #hash.
+    // GA4 tak každou sekci uvidí jako samostatnou stránku místo jediné /.
+    const virtualPath=page==='uvod'?'/':'/'+encodeURIComponent(page)+'/';
+    const virtualUrl=location.origin+virtualPath;
+    const labels={uvod:'Domů',aktuality:'Aktuality',treneri:'Trenéři',treninky:'Tréninky',onas:'O nás',kontakt:'Kontakt',zavody:'Závody',
+      'zavody-ludger':'Běh o Ludgerův meč','zavody-jizbicky':'Jizbický kros','zavody-jestrebi':'Jestřebí kros',
+      galerie:'Fotogalerie',kalendar:'Kalendář',strava:'Strava',casomira:'Časomíra',terminovka:'Termínovka ČR',gdpr:'GDPR'};
+    gtag('event','page_view',{
+      page_title:(labels[page]||page)+' | Běžecký klub Náchod',
+      page_location:virtualUrl,
+      page_path:virtualPath
+    });
   }
   function enable(){
     if(active)return;
