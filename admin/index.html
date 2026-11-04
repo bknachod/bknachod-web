@@ -28,13 +28,13 @@ body{font:16px system-ui,Arial;background:#f0f6fc;color:#122b45;margin:0}header{
 <p class="photo-count" id="photoCount">0 / 10 fotografií</p><div id="photoList"></div>
 <label for="status">Stav</label><select id="status"><option value="draft">Koncept (nezveřejněno)</option><option value="published">Zveřejněno</option></select>
 <button id="save">Uložit článek</button><button type="button" class="secondary" id="clear">Nový článek</button></form></section>
-<section class="panel"><h2>Články</h2><div id="list">Načítám…</div></section></div>
+<section class="panel"><h2>Záloha databáze</h2><p class="help">Stáhne všechny články včetně ID, textů, stavů zveřejnění, dat a odkazů na fotografie do souboru JSON. Samotné fotografie na Cloudinary nejsou součástí zálohy.</p><button type="button" id="backupDatabase" class="secondary">Stáhnout zálohu databáze</button><p id="backupStatus" class="help" role="status" aria-live="polite"></p></section><section class="panel"><h2>Články</h2><div id="list">Načítám…</div></section></div>
 </main>
 <div id="idleWarning" hidden role="alertdialog" aria-modal="true" aria-labelledby="idleTitle" aria-describedby="idleText"><div class="panel"><h2 id="idleTitle">Upozornění na odhlášení</h2><p id="idleText">Z důvodu nečinnosti budete za 5 minut automaticky odhlášeni.</p><button type="button" id="stayLoggedIn">Zůstat přihlášen</button><button type="button" class="secondary" id="logoutIdle">Odhlásit se nyní</button></div></div>
 <script type="module">
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendEmailVerification,sendPasswordResetEmail,createUserWithEmailAndPassword,reload} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import {getFirestore,collection,query,onSnapshot,addDoc,updateDoc,deleteDoc,doc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import {getFirestore,collection,query,onSnapshot,getDocs,addDoc,updateDoc,deleteDoc,doc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 const config={apiKey:'AIzaSyB6__m4-BNgd7A9VDa9XvrixOumnQtCzt8',authDomain:'bkn-web-b1f6c.firebaseapp.com',projectId:'bkn-web-b1f6c',appId:'1:654862629114:web:8b3a025ce9e839ceb7f143'};
 const UPLOAD_ENDPOINT='https://bkn-fotografie.bknachod.workers.dev/upload';
 const app=initializeApp(config),auth=getAuth(app),db=getFirestore(app),posts=collection(db,'articles');
@@ -126,6 +126,28 @@ $('uploadPhotos').onclick=async()=>{
 };
 function render(){const root=$('list');root.replaceChildren();if(!items.length){root.textContent='Zatím žádné články.';return;}for(const p of items){const a=document.createElement('article');const title=document.createElement('strong');title.textContent=p.title||'Bez názvu';a.append(title,document.createTextNode(' – '+(p.eventDate||'')+' – '+(Array.isArray(p.photos)?p.photos.length:0)+' fotografií'));const edit=document.createElement('button');edit.textContent='Upravit';edit.className='secondary';edit.disabled=uploading;edit.onclick=()=>{if(uploading)return;editing=p.id;$('title').value=p.title||'';$('category').value='aktuality';$('eventDate').value=p.eventDate||'';$('content').value=p.content||'';$('status').value=p.status||'draft';photos=Array.isArray(p.photos)?p.photos.filter(x=>typeof x==='string'&&photoIsValid(x)).slice(0,10):[];$('uploadProgress').textContent='';$('photoFiles').value='';renderPhotos();$('formHeading').textContent='Upravit článek';rememberSavedForm();message('');scrollTo({top:0,behavior:'smooth'});};const del=document.createElement('button');del.textContent='Smazat';del.className='danger';del.disabled=uploading;del.onclick=async()=>{if(uploading)return;if(!confirm('Opravdu smazat článek? Odkazy na fotografie se odstraní z článku, ale soubory zůstanou v Cloudinary.'))return;try{await deleteDoc(doc(db,'articles',p.id));if(editing===p.id)reset();message('Článek smazán.')}catch(e){message('Mazání selhalo: '+e.message)}};a.append(edit,del);const publication=document.createElement('div');publication.className='publication-status '+(p.status==='published'?'published':'unpublished');publication.textContent='Stav článku: '+(p.status==='published'?'Zveřejněno – viditelné na webu':'Nezveřejněno – pouze v administraci');a.append(publication);root.append(a);}}
 onAuthStateChanged(auth,user=>{stopIdleTimer();if(unsub){unsub();unsub=null;}message('');if(!user){show('login');return;}if(!EDITOR_EMAILS.has((user.email||'').toLowerCase())){show('verify');$('sendVerify').hidden=true;$('refreshVerify').hidden=true;message('Tento účet nemá oprávnění editora.');return;}if(!user.emailVerified){show('verify');$('sendVerify').hidden=false;$('refreshVerify').hidden=false;message('E-mail ještě není ověřen.');return;}show('editor');startIdleTimer();$('currentEmail').textContent=user.email;unsub=onSnapshot(query(posts),snap=>{items=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.eventDate||'').localeCompare(a.eventDate||''));render();},e=>message('Načtení článků selhalo: '+e.message));});
+$('backupDatabase').onclick=async()=>{
+ const button=$('backupDatabase'),status=$('backupStatus');
+ if(!isEditor(auth.currentUser)){status.textContent='Zálohu může stáhnout pouze přihlášený oprávněný editor.';return;}
+ button.disabled=true;status.textContent='Načítám články z Firebase…';
+ try{
+  const snapshot=await getDocs(posts);
+  const serialize=value=>{
+   if(value&&typeof value.toDate==='function')return {__type:'firestore_timestamp',iso:value.toDate().toISOString()};
+   if(Array.isArray(value))return value.map(serialize);
+   if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value).map(([key,v])=>[key,serialize(v)]));
+   return value;
+  };
+  const backup={format:'bkn-firestore-backup',version:1,projectId:config.projectId,collection:'articles',exportedAt:new Date().toISOString(),count:snapshot.size,documents:snapshot.docs.map(d=>({id:d.id,data:serialize(d.data())}))};
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json;charset=utf-8'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  const stamp=new Date().toLocaleDateString('sv-SE');
+  a.href=url;a.download='BKN_Firebase_articles_'+stamp+'.json';document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),60000);
+  status.textContent='Záloha připravena: '+snapshot.size+' článků. Zkontroluj stažený soubor.';
+ }catch(e){status.textContent='Zálohování selhalo: '+e.message;}
+ finally{button.disabled=false;}
+};
 $('loginForm').onsubmit=async e=>{e.preventDefault();try{await signInWithEmailAndPassword(auth,$('email').value,$('password').value);$('password').value='';}catch(err){message('Přihlášení selhalo: '+err.message);}};
 async function requestPasswordLink(email){
  const address=(email||'').trim().toLowerCase();
