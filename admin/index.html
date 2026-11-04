@@ -10,9 +10,9 @@ body{font:16px system-ui,Arial;background:#f0f6fc;color:#122b45;margin:0}header{
 </head>
 <body><header><h1>Administrace Běžeckého klubu Náchod</h1></header><main>
 <div id="notice" role="status" aria-live="polite"></div>
-<section class="panel" id="login"><h2>Přihlášení editora</h2><form id="loginForm"><label for="email">E-mail</label><input id="email" type="email" required autocomplete="username"><label for="password">Heslo</label><input id="password" type="password" required autocomplete="current-password"><button>Přihlásit se</button></form></section>
+<section class="panel" id="login"><h2>Přihlášení editora</h2><form id="loginForm"><label for="email">E-mail</label><input id="email" type="email" required autocomplete="username"><label for="password">Heslo</label><input id="password" type="password" required autocomplete="current-password"><button>Přihlásit se</button><button type="button" class="secondary" id="forgotPassword">Zapomenuté heslo / nastavit vlastní heslo</button></form><p class="help">Nový editor si může nastavit vlastní heslo pomocí odkazu zaslaného na svůj e-mail.</p></section>
 <section class="panel" id="verify" hidden><h2>Ověření e-mailu</h2><p>Pro správu článků je potřeba ověřit e-mailovou adresu. Po potvrzení odkazu v e-mailu se sem vrať a klikni na „Zkontrolovat ověření“.</p><button id="sendVerify">Odeslat ověřovací e-mail</button><button class="secondary" id="refreshVerify">Zkontrolovat ověření</button><button class="secondary" id="logoutVerify">Odhlásit se</button></section>
-<div id="editor" hidden><section class="panel"><p>Přihlášen: <strong id="currentEmail"></strong> <button class="secondary" id="logout">Odhlásit se</button></p><h2 id="formHeading">Nový článek</h2>
+<div id="editor" hidden><section class="panel"><p>Přihlášen: <strong id="currentEmail"></strong> <button type="button" class="secondary" id="changePassword">Změnit heslo</button> <button class="secondary" id="logout">Odhlásit se</button></p><h2 id="formHeading">Nový článek</h2>
 <form id="articleForm"><label for="title">Název článku</label><input id="title" required maxlength="180"><label for="category">Umístění</label><select id="category"><option value="aktuality">Aktuality</option><option value="vysledky">Závody → Naše výsledky</option></select><label for="eventDate">Datum události</label><input id="eventDate" type="date" required><label for="content">Text článku</label><textarea id="content" required></textarea>
 <h3>Fotogalerie k článku</h3>
 <p class="help">Vyber fotografie přímo z počítače. Nahrají se do Cloudinary, jejich odkazy se přidají do článku. Maximálně 10 fotografií; první je úvodní. Nahrané soubory zůstávají v Cloudinary i při odebrání z článku.</p>
@@ -30,11 +30,13 @@ body{font:16px system-ui,Arial;background:#f0f6fc;color:#122b45;margin:0}header{
 <div id="idleWarning" hidden role="alertdialog" aria-modal="true" aria-labelledby="idleTitle" aria-describedby="idleText"><div class="panel"><h2 id="idleTitle">Upozornění na odhlášení</h2><p id="idleText">Z důvodu nečinnosti budete za 5 minut automaticky odhlášeni.</p><button type="button" id="stayLoggedIn">Zůstat přihlášen</button><button type="button" class="secondary" id="logoutIdle">Odhlásit se nyní</button></div></div>
 <script type="module">
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendEmailVerification,reload} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendEmailVerification,sendPasswordResetEmail,reload} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {getFirestore,collection,query,onSnapshot,addDoc,updateDoc,deleteDoc,doc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 const config={apiKey:'AIzaSyB6__m4-BNgd7A9VDa9XvrixOumnQtCzt8',authDomain:'bkn-web-b1f6c.firebaseapp.com',projectId:'bkn-web-b1f6c',appId:'1:654862629114:web:8b3a025ce9e839ceb7f143'};
 const UPLOAD_ENDPOINT='https://bkn-fotografie.bknachod.workers.dev/upload';
 const app=initializeApp(config),auth=getAuth(app),db=getFirestore(app),posts=collection(db,'articles');
+const EDITOR_EMAILS=new Set(['bknachod@gmail.com','klara.pribylova@yahoo.com','visolcik@seznam.cz']);
+const isEditor=user=>Boolean(user&&user.emailVerified&&EDITOR_EMAILS.has((user.email||'').toLowerCase()));
 const $=id=>document.getElementById(id);let editing=null,items=[],unsub=null,photos=[],uploading=false;const message=t=>$('notice').textContent=t;
 // Časovač nečinnosti: upozornění po 5 minutách, odhlášení po 10 minutách.
 const IDLE_WARNING_MS=5*60*1000,IDLE_LOGOUT_MS=10*60*1000;
@@ -96,7 +98,7 @@ $('uploadPhotos').onclick=async()=>{
  const files=Array.from($('photoFiles').files);
  if(!files.length){message('Nejdříve vyber fotografii nebo více fotografií.');return;}
  if(files.length>10-photos.length){message('Zbývá místo jen pro '+(10-photos.length)+' fotografií.');return;}
- if(!auth.currentUser||auth.currentUser.email!=='bknachod@gmail.com'||!auth.currentUser.emailVerified){message('Pro nahrávání je nutné přihlášení oprávněného editora.');return;}
+ if(!auth.currentUser||!isEditor(auth.currentUser)){message('Pro nahrávání je nutné přihlášení oprávněného editora.');return;}
  const allowed=['image/jpeg','image/png','image/webp'];
  for(const file of files){if(!allowed.includes(file.type)){message('Nepodporovaný formát: '+file.name);return;}if(file.size>10*1024*1024){message('Fotografie '+file.name+' je větší než 10 MB.');return;}}
  uploading=true;$('save').disabled=true;$('clear').disabled=true;renderPhotos();message('');
@@ -120,10 +122,23 @@ $('uploadPhotos').onclick=async()=>{
  }finally{uploading=false;$('save').disabled=false;$('clear').disabled=false;renderPhotos();}
 };
 function render(){const root=$('list');root.replaceChildren();if(!items.length){root.textContent='Zatím žádné články.';return;}for(const p of items){const a=document.createElement('article');const title=document.createElement('strong');title.textContent=p.title||'Bez názvu';a.append(title,document.createTextNode(' – '+(p.eventDate||'')+' – '+(p.status==='published'?'Zveřejněno':'Koncept')+' – '+(Array.isArray(p.photos)?p.photos.length:0)+' fotografií'));const edit=document.createElement('button');edit.textContent='Upravit';edit.className='secondary';edit.disabled=uploading;edit.onclick=()=>{if(uploading)return;editing=p.id;$('title').value=p.title||'';$('category').value=p.category||'aktuality';$('eventDate').value=p.eventDate||'';$('content').value=p.content||'';$('status').value=p.status||'draft';photos=Array.isArray(p.photos)?p.photos.filter(x=>typeof x==='string'&&photoIsValid(x)).slice(0,10):[];$('uploadProgress').textContent='';$('photoFiles').value='';renderPhotos();$('formHeading').textContent='Upravit článek';rememberSavedForm();message('');scrollTo({top:0,behavior:'smooth'});};const del=document.createElement('button');del.textContent='Smazat';del.className='danger';del.disabled=uploading;del.onclick=async()=>{if(uploading)return;if(!confirm('Opravdu smazat článek? Odkazy na fotografie se odstraní z článku, ale soubory zůstanou v Cloudinary.'))return;try{await deleteDoc(doc(db,'articles',p.id));if(editing===p.id)reset();message('Článek smazán.')}catch(e){message('Mazání selhalo: '+e.message)}};a.append(edit,del);root.append(a);}}
-onAuthStateChanged(auth,user=>{stopIdleTimer();if(unsub){unsub();unsub=null;}message('');if(!user){show('login');return;}if(user.email!=='bknachod@gmail.com'||!user.emailVerified){show('verify');message(user.email!=='bknachod@gmail.com'?'Tento účet zatím nemá oprávnění editora.':'E-mail ještě není ověřen.');return;}show('editor');startIdleTimer();$('currentEmail').textContent=user.email;unsub=onSnapshot(query(posts),snap=>{items=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.eventDate||'').localeCompare(a.eventDate||''));render();},e=>message('Načtení článků selhalo: '+e.message));});
+onAuthStateChanged(auth,user=>{stopIdleTimer();if(unsub){unsub();unsub=null;}message('');if(!user){show('login');return;}if(!EDITOR_EMAILS.has((user.email||'').toLowerCase())){show('verify');$('sendVerify').hidden=true;$('refreshVerify').hidden=true;message('Tento účet nemá oprávnění editora.');return;}if(!user.emailVerified){show('verify');$('sendVerify').hidden=false;$('refreshVerify').hidden=false;message('E-mail ještě není ověřen.');return;}show('editor');startIdleTimer();$('currentEmail').textContent=user.email;unsub=onSnapshot(query(posts),snap=>{items=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.eventDate||'').localeCompare(a.eventDate||''));render();},e=>message('Načtení článků selhalo: '+e.message));});
 $('loginForm').onsubmit=async e=>{e.preventDefault();try{await signInWithEmailAndPassword(auth,$('email').value,$('password').value);$('password').value='';}catch(err){message('Přihlášení selhalo: '+err.message);}};
+async function requestPasswordLink(email){
+ const address=(email||'').trim().toLowerCase();
+ if(!address){message('Nejdříve zadej e-mailovou adresu.');return;}
+ if(!EDITOR_EMAILS.has(address)){message('Odkaz lze požadovat pouze pro povolené editory BKN.');return;}
+ try{
+  await sendPasswordResetEmail(auth,address);
+  message('Pokud pro tuto adresu existuje účet, dorazí e-mail s odkazem pro nastavení hesla. Zkontroluj také spam.');
+ }catch(err){
+  message('Odeslání odkazu se nezdařilo ('+err.code+'). Zkontroluj nastavení Firebase Authentication.');
+ }
+}
+$('forgotPassword').onclick=()=>requestPasswordLink($('email').value);
+$('changePassword').onclick=()=>requestPasswordLink(auth.currentUser?.email);
 $('sendVerify').onclick=async()=>{try{await sendEmailVerification(auth.currentUser);message('Ověřovací e-mail byl odeslán. Zkontroluj i spam.');}catch(e){message('Odeslání selhalo: '+e.message);}};
-$('refreshVerify').onclick=async()=>{try{await reload(auth.currentUser);if(auth.currentUser.emailVerified){show('editor');location.reload();}else message('E-mail zatím není ověřen.');}catch(e){message(e.message);}};
+$('refreshVerify').onclick=async()=>{try{await reload(auth.currentUser);if(isEditor(auth.currentUser)){location.reload();}else message('E-mail zatím není ověřen.');}catch(e){message(e.message);}};
 $('logout').onclick=()=>idleLogout();$('logoutVerify').onclick=()=>signOut(auth);
 $('clear').onclick=()=>{if(uploading)return;reset();message('');};
 $('articleForm').onsubmit=async e=>{e.preventDefault();if(uploading){message('Počkej na dokončení nahrávání fotografií.');return;}$('save').disabled=true;try{const data={title:$('title').value.trim(),category:$('category').value,eventDate:$('eventDate').value,content:$('content').value.trim(),status:$('status').value,photos:[...photos],updatedAt:serverTimestamp()};if(editing)await updateDoc(doc(db,'articles',editing),data);else await addDoc(posts,{...data,createdAt:serverTimestamp()});reset();message('Článek uložen.');}catch(err){message('Uložení selhalo: '+err.message);}finally{$('save').disabled=false;}};
