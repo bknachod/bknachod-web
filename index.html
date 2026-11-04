@@ -374,10 +374,8 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
 </div>
 <div class="bkn-training-join"><div aria-hidden="true" class="bkn-training-join-icon">🏃</div><div><h3>Chceš se k nám přidat?</h3><p>Rád běháš nebo chceš s běháním teprve začít? Přidej se k Běžeckému klubu Náchod! Rádi tě mezi sebou přivítáme.</p><a class="bkn-training-join-btn" href="https://bknachod.trial.eosclub.app/registration" rel="noopener noreferrer" target="_blank">Přihlásit se do BKN →</a></div></div>
 </section>
-<div class="pale"><section class="section bkn-races-page" id="zavody"><h2>Závody BKN</h2><p class="lead">Naše závodní úspěchy i závody, které sami pořádáme.</p>
-<div class="bkn-race-tabs" role="tablist" aria-label="Sekce závodů"><button type="button" class="selected" data-race-tab="vysledky" role="tab" aria-selected="true">Naše výsledky</button><button type="button" data-race-tab="poradame" role="tab" aria-selected="false">Pořádáme</button></div>
-<div id="bknRaceResults" class="bkn-race-panel" role="tabpanel"><h3>Naše výsledky a reportáže</h3><p>Postupně zde budeme přidávat absolvované závody členů BKN, jejich umístění, reportáže a fotografie. Nejnovější závody budou vždy první.</p><div class="bkn-race-empty">První reportáže a výsledky připravujeme.</div></div>
-<div id="bknRaceOrganized" class="bkn-race-panel" role="tabpanel" hidden><h3>Námi pořádané závody</h3><p>Vyberte závod a podívejte se na informace, výsledky minulých ročníků a fotografie.</p><div class="bkn-organized-grid">
+<div class="pale"><section class="section bkn-races-page" id="zavody"><h2>Závody BKN</h2><p class="lead">Závody, které pořádá Běžecký klub Náchod.</p>
+<div id="bknRaceOrganized" class="bkn-race-panel" role="tabpanel"><h3>Námi pořádané závody</h3><p>Vyberte závod a podívejte se na informace, výsledky minulých ročníků a fotografie.</p><div class="bkn-organized-grid">
 <a class="bkn-organized-card" href="#zavody-jestrebi"><img src="bkn-jestrebi-novy.webp" alt="Jestřebí kros"><strong>Jestřebí kros →</strong><span>Fotogalerie a oficiální web závodu</span></a>
 <a class="bkn-organized-card" href="#zavody-ludger"><img src="bkn-ludger-novy.webp" alt="Běh o Ludgerův meč"><strong>Běh o Ludgerův meč →</strong><span>Informace, výsledky a fotografie</span></a>
 <a class="bkn-organized-card" href="#zavody-jizbicky"><img src="bkn-jizbicky-novy.webp" alt="Jizbický kros"><strong>Jizbický kros →</strong><span>Informace, výsledky a fotografie</span></a>
@@ -446,17 +444,25 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
 </script>
 <script id="bkn-races-tabs-script">
 (function(){
- const buttons=[...document.querySelectorAll('[data-race-tab]')];
- const results=document.getElementById('bknRaceResults'),organized=document.getElementById('bknRaceOrganized'),detail=document.getElementById('bknRaceDetail');
- let tab='vysledky';
+ const organized=document.getElementById('bknRaceOrganized');
+ const detail=document.getElementById('bknRaceDetail');
  function show(page){
-  const isDetail=page==='zavody-ludger'||page==='zavody-jizbicky'||page==='zavody-jestrebi';
-  if(isDetail){tab='poradame';const ludger=page==='zavody-ludger';const jestrebi=page==='zavody-jestrebi';document.getElementById('bknRaceDetailTitle').textContent=jestrebi?'Jestřebí kros':ludger?'Běh o Ludgerův meč':'Jizbický kros';const img=document.getElementById('bknRaceDetailImage');img.src=jestrebi?'bkn-jestrebi-novy.webp':ludger?'bkn-ludger-novy.webp':'bkn-jizbicky-novy.webp';img.alt=document.getElementById('bknRaceDetailTitle').textContent;document.getElementById('bknJestrebiInfo').hidden=!jestrebi;document.getElementById('bknLudgerInfo').hidden=!ludger;document.getElementById('bknRaceGenericDetail').hidden=ludger||jestrebi;}
-  results.hidden=isDetail||tab!=='vysledky';organized.hidden=isDetail||tab!=='poradame';detail.hidden=!isDetail;
-  buttons.forEach(b=>{const selected=b.dataset.raceTab===tab;b.classList.toggle('selected',selected);b.setAttribute('aria-selected',String(selected));});
+  const isDetail=['zavody-ludger','zavody-jizbicky','zavody-jestrebi'].includes(page);
+  if(isDetail){
+   const ludger=page==='zavody-ludger', jestrebi=page==='zavody-jestrebi';
+   const title=document.getElementById('bknRaceDetailTitle');
+   title.textContent=jestrebi?'Jestřebí kros':ludger?'Běh o Ludgerův meč':'Jizbický kros';
+   const img=document.getElementById('bknRaceDetailImage');
+   img.src=jestrebi?'bkn-jestrebi-novy.webp':ludger?'bkn-ludger-novy.webp':'bkn-jizbicky-novy.webp';
+   img.alt=title.textContent;
+   document.getElementById('bknJestrebiInfo').hidden=!jestrebi;
+   document.getElementById('bknLudgerInfo').hidden=!ludger;
+   document.getElementById('bknRaceGenericDetail').hidden=ludger||jestrebi;
+  }
+  organized.hidden=isDetail;
+  detail.hidden=!isDetail;
  }
- buttons.forEach(b=>b.addEventListener('click',()=>{tab=b.dataset.raceTab;if(location.hash!=='#zavody')location.hash='zavody';show('zavody');}));
- document.getElementById('bknRaceBack').addEventListener('click',()=>{tab='poradame';location.hash='zavody';show('zavody');});
+ document.getElementById('bknRaceBack').addEventListener('click',()=>{location.hash='zavody';show('zavody');});
  window.bknRaceRender=show;
  show(location.hash.slice(1));
 })();
