@@ -618,7 +618,70 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
   });
 })();
 </script>
-<div class="bkn-cookie-banner" id="bknCookieBanner" role="dialog" aria-label="Nastavení soukromí" aria-live="polite"><div><h2>🍪 Cookies a ochrana soukromí</h2><p>Pro správné fungování webu používáme nezbytné úložiště. Se souhlasem zobrazíme také obsah služeb Facebook, Strava a Google (kalendář a mapy), které mohou používat vlastní cookies a zpracovávat údaje o návštěvě. Volbu můžete kdykoliv změnit v patičce. <button type="button" class="bkn-cookie-settings" id="bknCookieInfoToggle" aria-expanded="false" aria-controls="bknCookieInfo">Více informací</button></p><div id="bknCookieInfo" hidden><p><strong>Nezbytné úložiště:</strong> uchovává vaši volbu souhlasu v tomto prohlížeči (90 dní při přijetí, 180 dní při odmítnutí). <strong>Volitelný externí obsah:</strong> Facebook (Meta), Strava a Google (Kalendář a Mapy). Po povolení mohou tyto služby zpracovávat IP adresu a další údaje podle svých vlastních podmínek a ukládat cookies; jejich konkrétní doby uchování určují poskytovatelé. Bez souhlasu se vložený obsah nenačte. <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener noreferrer">Meta</a> · <a href="https://www.strava.com/legal/privacy" target="_blank" rel="noopener noreferrer">Strava</a> · <a href="https://policies.google.com/privacy?hl=cs" target="_blank" rel="noopener noreferrer">Google</a>.</p></div></div><div class="bkn-cookie-actions"><button class="bkn-cookie-accept" id="bknCookieAccept" type="button">Přijmout vše</button><button class="bkn-cookie-reject" id="bknCookieReject" type="button">Odmítnout volitelné</button></div></div>
+<div class="bkn-cookie-banner" id="bknCookieBanner" role="dialog" aria-label="Nastavení soukromí" aria-live="polite"><div><h2>🍪 Cookies a ochrana soukromí</h2><p>Pro správné fungování webu používáme nezbytné úložiště. Se souhlasem zobrazíme také obsah služeb Facebook, Strava a Google (kalendář, mapy a Google Analytics), které mohou používat vlastní cookies a zpracovávat údaje o návštěvě. Volbu můžete kdykoliv změnit v patičce. <button type="button" class="bkn-cookie-settings" id="bknCookieInfoToggle" aria-expanded="false" aria-controls="bknCookieInfo">Více informací</button></p><div id="bknCookieInfo" hidden><p><strong>Nezbytné úložiště:</strong> uchovává vaši volbu souhlasu v tomto prohlížeči (90 dní při přijetí, 180 dní při odmítnutí). <strong>Volitelný externí obsah:</strong> Facebook (Meta), Strava a Google (Kalendář, Mapy a Analytics – měření návštěvnosti a kliknutí). Po povolení mohou tyto služby zpracovávat IP adresu a další údaje podle svých vlastních podmínek a ukládat cookies; jejich konkrétní doby uchování určují poskytovatelé. Bez souhlasu se vložený obsah nenačte. <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener noreferrer">Meta</a> · <a href="https://www.strava.com/legal/privacy" target="_blank" rel="noopener noreferrer">Strava</a> · <a href="https://policies.google.com/privacy?hl=cs" target="_blank" rel="noopener noreferrer">Google</a>.</p></div></div><div class="bkn-cookie-actions"><button class="bkn-cookie-accept" id="bknCookieAccept" type="button">Přijmout vše</button><button class="bkn-cookie-reject" id="bknCookieReject" type="button">Odmítnout volitelné</button></div></div>
+<script id="bkn-ga4-script">
+(function(){
+  'use strict';
+  const ID='G-VWX159VT55';
+  let loaded=false, active=false, lastPage='';
+  window.dataLayer=window.dataLayer||[];
+  window.gtag=window.gtag||function(){window.dataLayer.push(arguments);};
+  function pageName(){
+    const hash=decodeURIComponent(location.hash.slice(1)||'uvod');
+    return hash.replace(/[^a-zA-Z0-9_-]/g,'').slice(0,80)||'uvod';
+  }
+  function trackPage(){
+    if(!active)return;
+    const page=pageName();
+    if(page===lastPage)return;
+    lastPage=page;
+    gtag('event','page_view',{page_title:document.title+' | '+page,page_location:location.href,page_path:location.pathname+location.hash});
+  }
+  function enable(){
+    if(active)return;
+    active=true;
+    window['ga-disable-'+ID]=false;
+    if(!loaded){
+      loaded=true;
+      gtag('js',new Date());
+      gtag('config',ID,{send_page_view:false,anonymize_ip:true});
+      const script=document.createElement('script');
+      script.async=true;
+      script.src='https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(ID);
+      document.head.appendChild(script);
+    }
+    trackPage();
+  }
+  function disable(){
+    active=false;
+    window['ga-disable-'+ID]=true;
+    lastPage='';
+    // Odstranění dostupných GA cookies při odvolání souhlasu.
+    const hosts=[location.hostname,'.'+location.hostname, '.bknachod.eu'];
+    document.cookie.split(';').forEach(part=>{
+      const name=part.split('=')[0].trim();
+      if(!/^_ga(?:_|$)/.test(name))return;
+      for(const domain of hosts){
+        document.cookie=name+'=; Max-Age=0; path=/; domain='+domain+'; SameSite=Lax';
+      }
+      document.cookie=name+'=; Max-Age=0; path=/; SameSite=Lax';
+    });
+  }
+  window.bknAnalyticsConsent=function(allowed){if(allowed)enable();else disable();};
+  disable();
+  window.addEventListener('hashchange',trackPage);
+  document.addEventListener('click',function(event){
+    if(!active)return;
+    const a=event.target.closest('a[href]');
+    if(!a)return;
+    let url;
+    try{url=new URL(a.href,location.href);}catch{return;}
+    if(/eosclub\.app$/.test(url.hostname)||/eosclub\.app$/.test(url.hostname.replace(/^www\./,''))){
+      gtag('event','registration_click',{link_url:url.href,link_text:(a.textContent||'').trim().slice(0,100)});
+    }
+  });
+})();
+</script>
 <script id="bkn-cookie-script">
 (function(){
  const key='bkn-cookie-choice-v1';
@@ -654,14 +717,14 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
    if(fb){fb.src='about:blank';fb.removeAttribute('data-cookie-placeholder');}
    showPlaceholders();
  }
- function setChoice(next){choice=next;try{localStorage.setItem(key,JSON.stringify({choice:next,savedAt:Date.now()}))}catch(e){}window.bknExternalConsent=next==='accepted';banner.classList.remove('is-visible');if(window.bknExternalConsent)activate();else deactivate();}
+ function setChoice(next){choice=next;try{localStorage.setItem(key,JSON.stringify({choice:next,savedAt:Date.now()}))}catch(e){}window.bknExternalConsent=next==='accepted';window.bknAnalyticsConsent?.(window.bknExternalConsent);banner.classList.remove('is-visible');if(window.bknExternalConsent)activate();else deactivate();}
  document.getElementById('bknCookieAccept').addEventListener('click',()=>setChoice('accepted'));
  document.getElementById('bknCookieReject').addEventListener('click',()=>setChoice('rejected'));
  document.querySelectorAll('[data-bkn-cookie-settings]').forEach(el=>el.addEventListener('click',()=>banner.classList.add('is-visible')));
  const infoToggle=document.getElementById('bknCookieInfoToggle');
  const info=document.getElementById('bknCookieInfo');
  if(infoToggle&&info)infoToggle.addEventListener('click',()=>{info.hidden=!info.hidden;infoToggle.setAttribute('aria-expanded',String(!info.hidden));});
- if(window.bknExternalConsent)activate();else{deactivate();if(!choice)banner.classList.add('is-visible');}
+ window.bknAnalyticsConsent?.(window.bknExternalConsent);if(window.bknExternalConsent)activate();else{deactivate();if(!choice)banner.classList.add('is-visible');}
 })();
 </script><script id="bkn-ludger-results-script">(function(){
 const data=[["Hlavní závod 8 km", 1, "1 / M35-44", 1, "Kamil Krunka", 1986, "Běžecký klub Náchod", "28:22"],["Hlavní závod 8 km", 2, "1 / M34", 509, "Klym Pavel", 1999, "HR STAVBY TRUTNOV", "29:04"],["Hlavní závod 8 km", 3, "2 / M34", 6, "Matěj Novák", 2000, "Běžecký klub Náchod", "29:43"],["Hlavní závod 8 km", 4, "2 / M35-44", 7, "Vítězslav Šolc", 1991, "Běžecký klub Náchod", "31:42"],["Hlavní závod 8 km", 5, "3 / M34", 25, "Martin Habr", 1996, "TJ Sokol Olešnice", "32:01"],["Hlavní závod 8 km", 6, "1 / M45-54", 15, "Martin Bartoš", 1980, "Běžecký klub Náchod", "32:20"],["Hlavní závod 8 km", 7, "3 / M35-44", 8, "Pavel Zákravský", 1985, "MFK Nové Město nad Metují", "33:05"],["Hlavní závod 8 km", 8, "1 / M55-64", 19, "František Buřil", 1966, "Vidochov", "33:16"],["Hlavní závod 8 km", 9, "4 / M34", 24, "Filip Kulda", 2005, "TJ Sokol Olešnice", "33:40"],["Hlavní závod 8 km", 10, "5 / M34", 12, "Kamil Dąbek", 1995, "GóryLasy", "33:42"],["Hlavní závod 8 km", 11, "2 / M45-54", 72, "Ondřej Kubík", 1981, "TJ Maratonstav Úpice", "33:45"],["Hlavní závod 8 km", 12, "4 / M35-44", 20, "Vítězslav Mikeš", 1989, "Zdobín - DJ Brácha Team", "34:02"],["Hlavní závod 8 km", 13, "3 / M45-54", 119, "Jan Melišík", 1974, "Skilauf team", "34:12"],["Hlavní závod 8 km", 14, "6 / M34", 117, "Adam Šturma", 2008, "Carla.kupkolo.cz", "34:21"],["Hlavní závod 8 km", 15, "1 / Z44", 3, "Radka Krtičková", 1988, "Žďárky", "34:34"],["Hlavní závod 8 km", 16, "2 / Z44", 2, "Vendula Machová", 1989, "Běžecký klub Náchod", "34:44"],["Hlavní závod 8 km", 17, "3 / Z44", 14, "Markéta Zeisková", 1998, "Běžecký klub Náchod", "35:00"],["Hlavní závod 8 km", 18, "1 / Z45-54", 13, "Linda Mrázková", 1980, "Lintišáci", "35:05"],["Hlavní závod 8 km", 19, "7 / M34", 89, "David Rudolf", 1994, "Slavia Batňovice", "35:47"],["Hlavní závod 8 km", 20, "2 / M55-64", 83, "Martin Osoba", 1965, "TJ Lokomotiva Meziměstí", "36:10"],["Hlavní závod 8 km", 21, "2 / Z45-54", 5, "Táňa Metelková", 1972, "Běžecký klub Náchod", "36:10"],["FIT trasa 4 km plus junioři", 1, "1 / Muži", 223, "Tomáš Metelka", 2008, "OK99 Hradec Králové", "14:42"],["FIT trasa 4 km plus junioři", 2, "2 / Muži", 228, "Ladislav Raim", 2009, "Sokol Hradec Králové", "15:50"],["FIT trasa 4 km plus junioři", 3, "3 / Muži", 202, "Jan Mareth", 2008, "SK Nové Město nad Metují", "16:10"],["FIT trasa 4 km plus junioři", 4, "4 / Muži", 210, "Jakub Hofman", 2010, "TJ Sokol Hradec Králové", "16:13"],["FIT trasa 4 km plus junioři", 5, "5 / Muži", 234, "Bruno Volhejn", 2009, ".", "16:37"],["FIT trasa 4 km plus junioři", 6, "6 / Muži", 244, "Miroslav Jirman", 1999, "Hronov", "17:44"],["FIT trasa 4 km plus junioři", 7, "7 / Muži", 217, "Jan Lněnička", 1994, "Verdek", "17:46"],["FIT trasa 4 km plus junioři", 8, "8 / Muži", 206, "Matěj Renský", 2009, "Běžecký klub Náchod", "18:36"],["FIT trasa 4 km plus junioři", 9, "1 / Ženy", 510, "Iveta Vlčková", 1983, "SK Babice / RAB", "18:58"],["FIT trasa 4 km plus junioři", 10, "9 / Muži", 238, "Martin Hryzlík", 1990, "Hradec Králové", "19:00"],["FIT trasa 4 km plus junioři", 11, "2 / Ženy", 201, "Natálie Kačerová", 2010, "Hvězda Pardubice", "19:03"],["FIT trasa 4 km plus junioři", 12, "3 / Ženy", 229, "Adéla Renská", 2009, "Běžecký klub Náchod", "19:15"],["FIT trasa 4 km plus junioři", 13, "10 / Muži", 209, "Václav Hanel", 2016, "SK Průvan Brzice", "19:49"],["FIT trasa 4 km plus junioři", 14, "11 / Muži", 245, "Michal Čermák", 1980, "Černčice", "19:50"],["FIT trasa 4 km plus junioři", 15, "12 / Muži", 241, "Zdeněk Doležal", 1991, "JITRNICE VELKÉ POŘÍČÍ", "19:57"],["FIT trasa 4 km plus junioři", 16, "4 / Ženy", 203, "Julie Sýkorová", 2009, "Sokol Hradec Králové", "20:25"],["FIT trasa 4 km plus junioři", 17, "13 / Muži", 227, "Josef Mládek", 1991, "Zábřeh", "20:44"],["FIT trasa 4 km plus junioři", 18, "14 / Muži", 231, "Petr Roztočil", 1997, "Náchod", "20:47"],["FIT trasa 4 km plus junioři", 19, "15 / Muži", 207, "Karel Mareth", 1971, "Česká Skalice", "21:48"],["FIT trasa 4 km plus junioři", 20, "5 / Ženy", 233, "Ludmila Vlčková", 1992, "Černilov", "21:54"],["FIT trasa 4 km plus junioři", 21, "16 / Muži", 205, "Jan Kornaś", 2010, "GóryLasy", "22:30"],["FIT trasa 4 km plus junioři", 22, "17 / Muži", 216, "Lukáš Linhart", 1989, "Náchod", "22:33"],["FIT trasa 4 km plus junioři", 23, "6 / Ženy", 211, "Tereza Hrnčárková", 1989, "Rtyně v Podkrkonoší", "23:17"],["FIT trasa 4 km plus junioři", 24, "7 / Ženy", 219, "Alena Marethová", 1972, "Česká Skalice", "23:26"],["FIT trasa 4 km plus junioři", 25, "8 / Ženy", 230, "Móňa Richterová", 1984, "Květinky a divočáci", "23:35"],["FIT trasa 4 km plus junioři", 26, "18 / Muži", 237, "Václav Skořepa", 1992, "Jitrnice Velké Poříčí", "23:40"],["150 m - Nejmladší závodníci kluci",1,"1 / kluci",143,"Dan Richter",2021,"Květinky a divočáci","00:26"],["150 m - Nejmladší závodníci kluci",2,"2 / kluci",141,"Tomáš Medek",2021,"Černilov","00:27"],["150 m - Nejmladší závodníci kluci",3,"3 / kluci",139,"Jan Kužel",2021,"T.J. Sokol Studenec","00:29"],["150 m - Nejmladší závodníce holky",1,"1 / holky",131,"Adéla Breuerová",2021,"Holenice","00:31"],["150 m - Nejmladší závodníce holky",2,"2 / holky",134,"Lilien Hambálková",2021,"Police nad Metují","00:35"],["300 m - Nejmladší kluci I",1,"1 / kluci",284,"Ondřej Medek",2019,"Černilov","00:46"],["300 m - Nejmladší kluci I",2,"2 / kluci",292,"Vít Ravinger",2019,"BKN","00:49"],["300 m - Nejmladší kluci I",3,"3 / kluci",271,"Ladislav Domáň",2019,"BKN","00:50"],["300 m - Nejmladší děvčata I",1,"1 / Ženy",281,"Veronika Machová",2019,"Olfin Car Ski team Trutnov","00:45"],["300 m - Nejmladší děvčata I",2,"2 / Ženy",279,"Terezie Kuželová",2019,"T.J. Sokol Studenec","00:46"],["500 m - Nejmladší kluci II",1,"1 / kluci",176,"Karel Petr",2017,"TJ Sokol Mezilesí","01:36"],["500 m - Nejmladší kluci II",2,"2 / kluci",173,"Milan Mikeš",2017,"Atletika Jaroměř","01:37"],["500 m - Nejmladší kluci II",3,"3 / kluci",172,"Kryštof Kulda",2018,"Běžecký klub Náchod","01:38"],["500 m - Nejmladší kluci II",8,"8 / kluci",177,"Samuel Sawczak",2017,"BK Náchod","02:00"],["500 m - Nejmladší děvčata II",1,"1 / holky",175,"Nela Nováková",2018,"Běžecký klub Náchod",""],["700 m - Mladší dívky a hoši I",1,"1 / kluci",266,"Teo Richter",2016,"Květinky a divočáci","02:56"],["700 m - Mladší dívky a hoši I",2,"2 / kluci",264,"Lukáš Polák",2016,"Běžecký klub Náchod","03:05"],["700 m - Mladší dívky a hoši I",6,"1 / holky",268,"Elen Švábová",2016,"Gym Jaroměř","03:10"],["700 m - Mladší dívky a hoši I",8,"2 / holky",265,"Alžběta Ravingerová",2016,"BKN","03:17"],["700 m - Mladší dívky a hoši I",10,"3 / holky",254,"Eliška Bartošová",2015,"Běžecký klub Náchod","03:25"],["1400 m - Starší dívky a hoši",1,"1 / kluci",251,"Robin Balcar",2011,"NMnM","05:50"]];
