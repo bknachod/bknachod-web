@@ -10,7 +10,9 @@ body{font:16px system-ui,Arial;background:#f0f6fc;color:#122b45;margin:0}header{
 </head>
 <body><header><h1>Administrace Běžeckého klubu Náchod</h1></header><main>
 <div id="notice" role="status" aria-live="polite"></div>
-<section class="panel" id="login"><h2>Přihlášení editora</h2><form id="loginForm"><label for="email">E-mail</label><input id="email" type="email" required autocomplete="username"><label for="password">Heslo</label><input id="password" type="password" required autocomplete="current-password"><button>Přihlásit se</button><button type="button" class="secondary" id="forgotPassword">Zapomenuté heslo / nastavit vlastní heslo</button></form><p class="help">Nový editor si může nastavit vlastní heslo pomocí odkazu zaslaného na svůj e-mail.</p></section>
+<section class="panel" id="login"><h2>Přihlášení editora</h2><form id="loginForm"><label for="email">E-mail</label><input id="email" type="email" required autocomplete="username"><label for="password">Heslo</label><input id="password" type="password" required autocomplete="current-password"><button>Přihlásit se</button></form><button type="button" class="secondary" id="openRegister">První přihlášení / vytvořit účet</button><button type="button" class="secondary" id="forgotPassword">Zapomenuté heslo</button><p class="help">Noví editoři si sami vytvoří účet a ověří svou e-mailovou adresu.</p></section>
+<section class="panel" id="register" hidden><h2>První přihlášení – vytvoření účtu</h2><p class="help">Registrace je určena pouze schváleným editorům BKN. Heslo si zvolíš sám a následně potvrdíš svůj e-mail.</p><form id="registerForm"><label for="registerEmail">E-mail</label><input id="registerEmail" type="email" required autocomplete="email"><label for="registerPassword">Vlastní heslo (minimálně 8 znaků)</label><input id="registerPassword" type="password" minlength="8" required autocomplete="new-password"><label for="registerPasswordAgain">Potvrdit heslo</label><input id="registerPasswordAgain" type="password" minlength="8" required autocomplete="new-password"><button type="submit">Vytvořit účet</button><button type="button" class="secondary" id="backRegister">Zpět na přihlášení</button></form></section>
+<section class="panel" id="recover" hidden><h2>Zapomenuté heslo</h2><p class="help">Zadej e-mail svého účtu. Přijde ti odkaz pro nastavení nového hesla.</p><form id="recoverForm"><label for="recoverEmail">E-mail</label><input id="recoverEmail" type="email" required autocomplete="email"><button type="submit">Odeslat odkaz pro obnovu hesla</button><button type="button" class="secondary" id="backRecover">Zpět na přihlášení</button></form></section>
 <section class="panel" id="verify" hidden><h2>Ověření e-mailu</h2><p>Pro správu článků je potřeba ověřit e-mailovou adresu. Po potvrzení odkazu v e-mailu se sem vrať a klikni na „Zkontrolovat ověření“.</p><button id="sendVerify">Odeslat ověřovací e-mail</button><button class="secondary" id="refreshVerify">Zkontrolovat ověření</button><button class="secondary" id="logoutVerify">Odhlásit se</button></section>
 <div id="editor" hidden><section class="panel"><p>Přihlášen: <strong id="currentEmail"></strong> <button type="button" class="secondary" id="changePassword">Změnit heslo</button> <button class="secondary" id="logout">Odhlásit se</button></p><h2 id="formHeading">Nový článek</h2>
 <form id="articleForm"><label for="title">Název článku</label><input id="title" required maxlength="180"><label for="category">Umístění</label><select id="category"><option value="aktuality">Aktuality</option><option value="vysledky">Závody → Naše výsledky</option></select><label for="eventDate">Datum události</label><input id="eventDate" type="date" required><label for="content">Text článku</label><textarea id="content" required></textarea>
@@ -30,7 +32,7 @@ body{font:16px system-ui,Arial;background:#f0f6fc;color:#122b45;margin:0}header{
 <div id="idleWarning" hidden role="alertdialog" aria-modal="true" aria-labelledby="idleTitle" aria-describedby="idleText"><div class="panel"><h2 id="idleTitle">Upozornění na odhlášení</h2><p id="idleText">Z důvodu nečinnosti budete za 5 minut automaticky odhlášeni.</p><button type="button" id="stayLoggedIn">Zůstat přihlášen</button><button type="button" class="secondary" id="logoutIdle">Odhlásit se nyní</button></div></div>
 <script type="module">
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendEmailVerification,sendPasswordResetEmail,reload} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendEmailVerification,sendPasswordResetEmail,createUserWithEmailAndPassword,reload} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {getFirestore,collection,query,onSnapshot,addDoc,updateDoc,deleteDoc,doc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 const config={apiKey:'AIzaSyB6__m4-BNgd7A9VDa9XvrixOumnQtCzt8',authDomain:'bkn-web-b1f6c.firebaseapp.com',projectId:'bkn-web-b1f6c',appId:'1:654862629114:web:8b3a025ce9e839ceb7f143'};
 const UPLOAD_ENDPOINT='https://bkn-fotografie.bknachod.workers.dev/upload';
@@ -88,7 +90,7 @@ $('stayLoggedIn').onclick=resetIdleTimer;
 $('logoutIdle').onclick=idleLogout;
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkIdle();});
 window.addEventListener('focus',checkIdle);
-function show(section){for(const id of ['login','verify','editor'])$(id).hidden=id!==section;}
+function show(section){for(const id of ['login','register','recover','verify','editor'])$(id).hidden=id!==section;}
 function photoIsValid(url){try{const u=new URL(url);return u.protocol==='https:'&&u.hostname==='res.cloudinary.com'&&u.pathname.includes('/image/upload/');}catch{return false;}}
 function renderPhotos(){const root=$('photoList');root.replaceChildren();$('photoCount').textContent=photos.length+' / 10 fotografií';$('addPhoto').disabled=uploading||photos.length>=10;$('uploadPhotos').disabled=uploading||photos.length>=10;$('photoFiles').disabled=uploading||photos.length>=10;for(let i=0;i<photos.length;i++){const url=photos[i],item=document.createElement('div');item.className='photo-item';const img=document.createElement('img');img.src=url;img.alt='Náhled fotografie '+(i+1);img.loading='lazy';const info=document.createElement('div');info.className='photo-info';const tag=document.createElement('strong');tag.textContent=i===0?'Úvodní fotografie':'Fotografie '+(i+1);const link=document.createElement('div');const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Otevřít fotografii';link.append(a);info.append(tag,link);const actions=document.createElement('div');actions.className='photo-actions';const up=document.createElement('button');up.type='button';up.className='secondary';up.textContent='↑';up.title='Posunout výše';up.disabled=uploading||i===0;up.onclick=()=>{[photos[i-1],photos[i]]=[photos[i],photos[i-1]];renderPhotos();};const down=document.createElement('button');down.type='button';down.className='secondary';down.textContent='↓';down.title='Posunout níže';down.disabled=uploading||i===photos.length-1;down.onclick=()=>{[photos[i],photos[i+1]]=[photos[i+1],photos[i]];renderPhotos();};const remove=document.createElement('button');remove.type='button';remove.className='danger';remove.textContent='Odebrat';remove.disabled=uploading;remove.onclick=()=>{photos.splice(i,1);renderPhotos();};actions.append(up,down,remove);item.append(img,info,actions);root.append(item);}}
 function reset(){editing=null;photos=[];$('articleForm').reset();$('eventDate').value=new Date().toLocaleDateString('en-CA');$('formHeading').textContent='Nový článek';$('photoUrl').value='';$('uploadProgress').textContent='';renderPhotos();rememberSavedForm();}reset();
@@ -135,7 +137,29 @@ async function requestPasswordLink(email){
   message('Odeslání odkazu se nezdařilo ('+err.code+'). Zkontroluj nastavení Firebase Authentication.');
  }
 }
-$('forgotPassword').onclick=()=>requestPasswordLink($('email').value);
+$('openRegister').onclick=()=>{message('');$('registerEmail').value=$('email').value;show('register');};
+$('forgotPassword').onclick=()=>{message('');$('recoverEmail').value=$('email').value;show('recover');};
+$('backRegister').onclick=()=>{message('');show('login');};
+$('backRecover').onclick=()=>{message('');show('login');};
+$('recoverForm').onsubmit=async e=>{e.preventDefault();await requestPasswordLink($('recoverEmail').value);};
+$('registerForm').onsubmit=async e=>{
+ e.preventDefault();
+ const address=$('registerEmail').value.trim().toLowerCase();
+ const pass=$('registerPassword').value;
+ if(!EDITOR_EMAILS.has(address)){message('Tato e-mailová adresa není mezi povolenými editory BKN.');return;}
+ if(pass.length<8){message('Heslo musí mít alespoň 8 znaků.');return;}
+ if(pass!==$('registerPasswordAgain').value){message('Hesla se neshodují.');return;}
+ const btn=$('registerForm').querySelector('button[type="submit"]');btn.disabled=true;
+ try{
+  const result=await createUserWithEmailAndPassword(auth,address,pass);
+  $('registerPassword').value='';$('registerPasswordAgain').value='';
+  await sendEmailVerification(result.user);
+  message('Účet byl vytvořen. Na e-mail jsme odeslali ověřovací odkaz. Po potvrzení klikni na „Zkontrolovat ověření“.');
+ }catch(err){
+  if(err.code==='auth/email-already-in-use')message('Účet pro tento e-mail už existuje. Použij přihlášení nebo obnovu hesla.');
+  else message('Vytvoření účtu nebo odeslání ověřovacího e-mailu selhalo: '+err.message);
+ }finally{btn.disabled=false;}
+};
 $('changePassword').onclick=()=>requestPasswordLink(auth.currentUser?.email);
 $('sendVerify').onclick=async()=>{try{await sendEmailVerification(auth.currentUser);message('Ověřovací e-mail byl odeslán. Zkontroluj i spam.');}catch(e){message('Odeslání selhalo: '+e.message);}};
 $('refreshVerify').onclick=async()=>{try{await reload(auth.currentUser);if(isEditor(auth.currentUser)){location.reload();}else message('E-mail zatím není ověřen.');}catch(e){message(e.message);}};
