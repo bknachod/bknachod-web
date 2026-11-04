@@ -670,6 +670,35 @@ body.bkn-subpage .hero,body.bkn-subpage .quick-links{display:none}
   window.bknAnalyticsConsent=function(allowed){if(allowed)enable();else disable();};
   disable();
   window.addEventListener('hashchange',trackPage);
+  // Podrobnější anonymní události pouze při uděleném souhlasu.
+  function trackEvent(name,params={}){
+    if(!active)return;
+    gtag('event',name,params);
+  }
+  document.addEventListener('click',function(event){
+    const button=event.target.closest('[data-race-tab],[data-ludger-tab],[data-jizbicky-tab]');
+    if(button){
+      const type=button.hasAttribute('data-race-tab')?'zavody':button.hasAttribute('data-ludger-tab')?'ludgeruv_mec':'jizbicky_kros';
+      const tab=button.dataset.raceTab||button.dataset.ludgerTab||button.dataset.jizbickyTab;
+      trackEvent('race_section_view',{race_name:type,section_name:tab});
+    }
+    const a=event.target.closest('a[href]');
+    if(!a)return;
+    let url;
+    try{url=new URL(a.href,location.href);}catch{return;}
+    const label=(a.textContent||'').trim().slice(0,80);
+    if(url.hostname==='jestrebikros.cz'||url.hostname==='www.jestrebikros.cz'){
+      trackEvent('race_link_click',{race_name:'jestrebi_kros'});
+    }
+    if(/sportchallenge\.cz$/.test(url.hostname)){
+      trackEvent('race_results_click',{destination:'sportchallenge'});
+    }
+    // Vlastní událost pro otevření článku; neodesíláme osobní údaje ani text článku.
+    if(a.closest('#bknLiveAktuality')||a.closest('[id*="Aktuality"]')){
+      trackEvent('article_link_click',{section_name:'aktuality'});
+    }
+  });
+
   document.addEventListener('click',function(event){
     if(!active)return;
     const a=event.target.closest('a[href]');
