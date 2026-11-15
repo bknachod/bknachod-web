@@ -841,7 +841,7 @@ if(target){
   const showState=(message)=>{const p=document.createElement('p');p.className='bkn-articles-state';p.textContent=message;target.replaceChildren(p);};
   const formatDate=(date)=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(date||''))return '';const [y,m,d]=date.split('-');return `${d}. ${m}. ${y}`;};
   const q=query(collection(db,'articles'),where('status','==','published'));
-  const safePhotos=post=>Array.isArray(post.photos)?post.photos.filter(url=>typeof url==='string'&&/^https:\/\/res\.cloudinary\.com\/[a-zA-Z0-9_-]+\/image\/upload\//.test(url)).slice(0,10):[];
+  const safePhotos=post=>Array.isArray(post.photos)?post.photos.filter(url=>typeof url==='string'&&/^https:\/\/res\.cloudinary\.com\/[a-zA-Z0-9_-]+\/image\/upload\//.test(url)).slice(0,16):[];
   const dialog=document.createElement('dialog');dialog.className='bkn-photo-dialog';dialog.setAttribute('aria-label','Fotogalerie článku');
   const full=document.createElement('img');full.alt='Fotografie z článku';
   const controls=document.createElement('div');controls.className='bkn-photo-dialog-controls';
