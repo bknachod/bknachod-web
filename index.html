@@ -528,6 +528,7 @@ body:not(.bkn-subpage) .bkn-sponsors{padding-top:16px}
   const quick=document.querySelector('.quick-links');
   const feed=document.getElementById('socialni-novinky');
   const homeCalendar=document.getElementById('bknHomeCalendar');
+  const featuredActivity=document.getElementById('bknFeaturedActivity');
   const sections=Object.fromEntries(ids.filter(id=>id!=='uvod').map(id=>[id,document.getElementById(id)]));
   // Each section is independently shown; the shared pale background is left in place.
   function render(){
@@ -537,6 +538,7 @@ body:not(.bkn-subpage) .bkn-sponsors{padding-top:16px}
     if(window.bknRaceRender)window.bknRaceRender(page);
     const home=page==='uvod';
     for(const el of [hero,quick,feed,homeCalendar])if(el)el.hidden=!home;
+    if(featuredActivity)featuredActivity.style.display=home?'':'none';
     for(const [id,el] of Object.entries(sections))if(el)el.hidden=(id!==sectionPage);
     document.body.classList.toggle('bkn-subpage',!home);
     document.querySelectorAll('#mainNav > a[href^="#"]').forEach(a=>{
