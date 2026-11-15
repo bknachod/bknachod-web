@@ -886,11 +886,10 @@ if(target){
       if(photo){picture.src=photo;picture.alt=`Úvodní fotografie: ${latest.title||'aktivita'}`;picture.loading='lazy';}
       else{picture.textContent='🏃';picture.setAttribute('aria-hidden','true');}
       const copy=document.createElement('div');copy.className='bkn-featured-copy';
-      const label=document.createElement('span');label.className='bkn-featured-label';label.textContent='Naše nejnovější aktivita';copy.append(label);
       if(latest.eventDate){const date=document.createElement('time');date.className='bkn-featured-date';date.dateTime=latest.eventDate;date.textContent=formatDate(latest.eventDate);copy.append(date);}
       const heading=document.createElement('h2');heading.textContent=latest.title||'Klubová aktivita';copy.append(heading);
       const summary=document.createElement('p');summary.textContent=(latest.content||'').replace(/\s+/g,' ').trim().slice(0,230);if(summary.textContent)copy.append(summary);
-      const button=document.createElement('button');button.type='button';button.className='bkn-featured-button';button.textContent='Zobrazit celou aktivitu →';
+      const button=document.createElement('button');button.type='button';button.className='bkn-featured-button';button.textContent='Zobrazit více →';
       button.addEventListener('click',()=>{
         location.hash='aktuality';
         setTimeout(()=>{const first=target.querySelector('.bkn-article-card');if(first){first.querySelector('.bkn-article-more')?.click();first.scrollIntoView({behavior:'smooth',block:'start'});}},180);
