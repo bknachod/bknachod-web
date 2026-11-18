@@ -17,7 +17,22 @@ body{font:16px system-ui,Arial;background:#f0f6fc;color:#122b45;margin:0}header{
 @media(min-width:1650px){.reg-table{font-size:13px}.reg-table th,.reg-table td{padding:11px 9px}}
 #campMap{height:340px;border-radius:12px;border:1px solid #b9d2e6;margin:12px 0}.camp-map-tools{display:flex;gap:8px;align-items:center}.camp-map-tools input{flex:1}.camp-map-tools button{margin:0;white-space:nowrap}@media(max-width:600px){#campMap{height:260px}.camp-map-tools{flex-wrap:wrap}}
 </style>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzxk2QmZyoTQ9o4A5A5kXQ0=" crossorigin=""></head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<style>
+/* Základní pojistka pro případ, že externí Leaflet CSS prohlížeč nenačte. */
+#campMap{position:relative;overflow:hidden;isolation:isolate;z-index:0;background:#eef3f6}
+#campMap .leaflet-pane,#campMap .leaflet-tile,#campMap .leaflet-marker-icon,#campMap .leaflet-marker-shadow,#campMap .leaflet-tile-container,#campMap .leaflet-pane>svg,#campMap .leaflet-pane>canvas{position:absolute;left:0;top:0}
+#campMap .leaflet-map-pane{position:absolute;left:0;top:0}
+#campMap .leaflet-tile{width:256px;height:256px;max-width:none!important;max-height:none!important;border:0;padding:0;margin:0}
+#campMap .leaflet-container{overflow:hidden}
+#campMap .leaflet-tile-pane{z-index:200}#campMap .leaflet-overlay-pane{z-index:400}#campMap .leaflet-shadow-pane{z-index:500}#campMap .leaflet-marker-pane{z-index:600}#campMap .leaflet-tooltip-pane{z-index:650}#campMap .leaflet-popup-pane{z-index:700}
+#campMap .leaflet-control-container .leaflet-top,#campMap .leaflet-control-container .leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}
+#campMap .leaflet-top{top:0}#campMap .leaflet-bottom{bottom:0}#campMap .leaflet-left{left:0}#campMap .leaflet-right{right:0}
+#campMap .leaflet-control{position:relative;z-index:800;pointer-events:auto;margin:10px}
+#campMap .leaflet-control-zoom a{display:block;width:30px;height:30px;line-height:30px;text-align:center;background:#fff;color:#222;font-size:22px;text-decoration:none;border:1px solid #ccc}
+#campMap .leaflet-control-attribution{background:#ffffffd9;font-size:11px;padding:2px 5px}
+#campMap .leaflet-grab{cursor:grab}#campMap .leaflet-dragging .leaflet-grab{cursor:grabbing}
+</style></head>
 <body><header><h1>Administrace Běžeckého klubu Náchod</h1></header><main>
 <div id="notice" role="status" aria-live="polite"></div>
 <section class="panel" id="login"><h2>Přihlášení editora</h2><form id="loginForm"><label for="email">E-mail</label><input id="email" type="email" required autocomplete="username"><label for="password">Heslo</label><input id="password" type="password" required autocomplete="current-password"><button>Přihlásit se</button></form><button type="button" class="secondary" id="openRegister">První přihlášení / vytvořit účet</button><button type="button" class="secondary" id="forgotPassword">Zapomenuté heslo</button><p class="help">Noví editoři si sami vytvoří účet a ověří svou e-mailovou adresu.</p></section>
