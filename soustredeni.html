@@ -7,7 +7,7 @@ import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase
 import {getFunctions,httpsCallable} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-functions.js';
 import {initializeAppCheck,ReCaptchaEnterpriseProvider} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js';
 const app=initializeApp({apiKey:'AIzaSyB6__m4-BNgd7A9VDa9XvrixOumnQtCzt8',authDomain:'bkn-web-b1f6c.firebaseapp.com',projectId:'bkn-web-b1f6c',appId:'1:654862629114:web:8b3a025ce9e839ceb7f143'});
-const APP_CHECK_SITE_KEY='DOPLNIT_VEREJNY_SITE_KEY';
+const APP_CHECK_SITE_KEY='6LenmSQuAAAAAP758QHdPKNyma8h9r4MtQ7owchk';
 initializeAppCheck(app,{provider:new ReCaptchaEnterpriseProvider(APP_CHECK_SITE_KEY),isTokenAutoRefreshEnabled:true});
 const submitCampRegistration=httpsCallable(getFunctions(app,'europe-west1'),'submitCampRegistration');
 const listCamps=httpsCallable(getFunctions(app,'europe-west1'),'listCamps');
